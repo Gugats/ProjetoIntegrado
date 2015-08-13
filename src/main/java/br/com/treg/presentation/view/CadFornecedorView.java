@@ -6,6 +6,7 @@
 package br.com.treg.presentation.view;
 
 import br.com.treg.business.model.Fornecedor;
+import java.util.Collection;
 
 /**
  *
@@ -16,11 +17,15 @@ public interface CadFornecedorView {
     interface CadFornecedorViewListener{
 
         public void salvar(Fornecedor fornecedor);
+
+        public void excluir(Fornecedor fornecedor);
         
     }
     
     void addListener(CadFornecedorViewListener listener);
     
     void sucesso(String msg);
+    
+    void populaListaFornecedores(Collection<Fornecedor> lista);
     
 }

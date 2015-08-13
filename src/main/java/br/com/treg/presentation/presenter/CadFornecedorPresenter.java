@@ -23,6 +23,8 @@ public class CadFornecedorPresenter implements CadFornecedorViewListener {
     public CadFornecedorPresenter(){
         this.view.addListener(this);
         bo = new FornecedorBO();
+        
+        this.view.populaListaFornecedores(bo.listAll());
     }
     
     public CadFornecedorView getView(){
@@ -31,7 +33,24 @@ public class CadFornecedorPresenter implements CadFornecedorViewListener {
 
     @Override
     public void salvar(Fornecedor fornecedor) {
-        bo.saveOrUpdate(fornecedor);
+        try{
+            bo.saveOrUpdate(fornecedor);
+        }catch(RuntimeException e){
+            
+        }
+        view.sucesso("Fornecedor salvo com sucesso!");
+        this.view.populaListaFornecedores(bo.listAll());
+    }
+
+    @Override
+    public void excluir(Fornecedor fornecedor) {
+        try{
+            bo.delete(fornecedor);
+        }catch(RuntimeException e){
+            
+        }
+        view.sucesso("Fornecedor excluido com sucesso!");
+        this.view.populaListaFornecedores(bo.listAll());
     }
     
 }

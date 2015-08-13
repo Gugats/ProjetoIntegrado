@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fornecedor")
 @XmlRootElement
-@Access(AccessType.FIELD)
 @NamedQueries({
     @NamedQuery(name = "Fornecedor.findAll", query = "SELECT f FROM Fornecedor f"),
     @NamedQuery(name = "Fornecedor.findById", query = "SELECT f FROM Fornecedor f WHERE f.id = :id"),
@@ -40,65 +39,66 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Fornecedor.findByEndereco", query = "SELECT f FROM Fornecedor f WHERE f.endereco = :endereco")})
 public class Fornecedor implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private IntegerProperty id = new SimpleIntegerProperty();
+    private IntegerProperty id;
     
-    @Column(name = "cnpj")
-    private StringProperty cnpj = new SimpleStringProperty();
-    @Column(name = "nome")
-    private StringProperty nome = new SimpleStringProperty();
-    @Column(name = "endereco")
-    private StringProperty endereco = new SimpleStringProperty();
+    private StringProperty cnpj;
+    
+    private StringProperty nome;
+    
+    private StringProperty endereco;
 
     public Fornecedor() {
+        id = new SimpleIntegerProperty();
+        cnpj = new SimpleStringProperty();
+        nome = new SimpleStringProperty();
+        endereco = new SimpleStringProperty();
     }
 
     //Getters and Setters for ID
-    @Access(AccessType.PROPERTY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public final Integer getId() {
-        return this.id.get();
+        return idProperty().get();
     }
     public void setId(Integer id) {
-        this.id.set(id);
+        idProperty().set(id);
     }
     public IntegerProperty idProperty(){
         return this.id;
     }
     
     //Getters and Setters for CNPJ
-    @Access(AccessType.PROPERTY)
+    @Column(name = "cnpj")
     public final String getCnpj() {
-        return this.cnpj.get();
+        return cnpjProperty().get();
     }
     public void setCnpj(String cnpj) {
-        this.cnpj.set(cnpj);
+        cnpjProperty().set(cnpj);
     }
     public StringProperty cnpjProperty() {
         return this.cnpj;
     }
 
     //Getters and Setters for NOME
-    @Access(AccessType.PROPERTY)
+    @Column(name = "nome")
     public final String getNome() {
-        return this.nome.get();
+        return nomeProperty().get();
     }
     public void setNome(String nome) {
-        this.nome.set(nome);
+        nomeProperty().set(nome);
     }
     public StringProperty nomeProperty() {
         return this.nome;
     }
 
     //Getters and Setters for ENDEREÇO
-    @Access(AccessType.PROPERTY)
+    @Column(name = "endereco")
     public final String getEndereco() {
-        return this.nome.get();
+        return enderecoProperty().get();
     }
     public void setEndereco(String endereco) {
-        this.endereco.set(endereco);
+        enderecoProperty().set(endereco);
     }
     public StringProperty enderecoProperty() {
         return this.endereco;
