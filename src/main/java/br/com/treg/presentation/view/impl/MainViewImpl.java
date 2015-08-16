@@ -5,6 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
+import br.com.treg.presentation.presenter.CadClientePresenter;
 import br.com.treg.presentation.presenter.CadFornecedorPresenter;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -36,13 +37,14 @@ public class MainViewImpl extends BorderPane {
     
     //Presenters
     private CadFornecedorPresenter cadFornecedorPresenter;
+    private CadClientePresenter cadClientePresenter;
     
     private ColorPicker colorPicker;
     
     private HBox menuLayout;
     private MenuBar menu;
     private Menu menuFile, menuEdit, menuView;
-    private MenuItem itemCadFornecedor;
+    private MenuItem itemCadFornecedor, itemCadCliente;
     private Text pick;
     
     public MainViewImpl(){
@@ -55,8 +57,10 @@ public class MainViewImpl extends BorderPane {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         menu.setMinWidth(primaryScreenBounds.getWidth());
         menuFile = new Menu("Cadastro");
+        
         itemCadFornecedor = new MenuItem("Fornecedor");
-        menuFile.getItems().add(itemCadFornecedor);
+        itemCadCliente = new MenuItem("Cliente");
+        menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente);
         
         menuEdit = new Menu("Edit");
         menuView = new Menu("View");
@@ -65,11 +69,19 @@ public class MainViewImpl extends BorderPane {
         menuLayout.getChildren().add(menu);
         
         cadFornecedorPresenter = new CadFornecedorPresenter();
+        cadClientePresenter = new CadClientePresenter();
         
         itemCadFornecedor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 setCenter((Parent)cadFornecedorPresenter.getView());
+            }
+        });
+        
+        itemCadCliente.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                setCenter((Parent)cadClientePresenter.getView());
             }
         });
    

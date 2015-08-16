@@ -5,29 +5,29 @@
  */
 package br.com.treg.presentation.view;
 
-import br.com.treg.business.model.Fornecedor;
+import br.com.treg.business.model.Cliente;
 import java.util.Collection;
 
 /**
  *
  * @author Gustavo
  */
-public interface CadFornecedorView {
+public interface CadClienteView {
     
-    interface CadFornecedorViewListener{
-
-        public void salvar(Fornecedor fornecedor);
-
-        public void excluir(Fornecedor fornecedor);
+    interface CadClienteViewListener{
+        
+        public void salvar(Cliente cliente);
+        
+        public void excluir(Cliente cliente);
         
     }
     
-    void addListener(CadFornecedorViewListener listener);
+    void addListener(CadClienteViewListener listener);
     
     void sucesso(String msg);
     
     void falha(String msg);
     
-    void populaListaFornecedores(Collection<Fornecedor> lista);
+    void populaListaClientes(Collection<Cliente> lista);
     
 }

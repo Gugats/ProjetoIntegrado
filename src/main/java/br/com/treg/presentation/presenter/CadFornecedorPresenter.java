@@ -36,7 +36,7 @@ public class CadFornecedorPresenter implements CadFornecedorViewListener {
         try{
             bo.saveOrUpdate(fornecedor);
         }catch(RuntimeException e){
-            
+            this.view.falha("Ocorreu um erro ao realizar operação! Contate o administrador!");
         }
         view.sucesso("Fornecedor salvo com sucesso!");
         this.view.populaListaFornecedores(bo.listAll());
@@ -47,7 +47,7 @@ public class CadFornecedorPresenter implements CadFornecedorViewListener {
         try{
             bo.delete(fornecedor);
         }catch(RuntimeException e){
-            
+            this.view.falha("Ocorreu um erro ao realizar operação! Contate o administrador!");
         }
         view.sucesso("Fornecedor excluido com sucesso!");
         this.view.populaListaFornecedores(bo.listAll());

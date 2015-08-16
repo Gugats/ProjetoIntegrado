@@ -7,19 +7,17 @@ package br.com.treg.presentation.view.impl;
 
 import br.com.treg.business.model.Fornecedor;
 import br.com.treg.presentation.view.CadFornecedorView;
-import com.sun.javafx.scene.text.TextLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -194,8 +192,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
             }
         });
         
-        excluir.setOnAction(new EventHandler<ActionEvent>() {
-
+        excluir.setOnAction(new EventHandler<ActionEvent>() {            
+            
             @Override
             public void handle(ActionEvent event) {
                 for(CadFornecedorViewListener l : listeners)
@@ -206,6 +204,7 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 tfEndereco.setText("");
                 fornecedor = new Fornecedor();
                 excluir.setDisable(true);
+                tabela.getSelectionModel().select(null);
             }
         });
         
@@ -224,5 +223,10 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
     public void populaListaFornecedores(Collection<Fornecedor> lista) {
         listaFornecedores = FXCollections.observableArrayList(lista);
         tabela.setItems(listaFornecedores);
+    }
+
+    @Override
+    public void falha(String msg) {
+        Notifications.create().title("Falha").position(Pos.CENTER).text(msg).showError();
     }
 }
