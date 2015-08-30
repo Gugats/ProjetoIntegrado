@@ -66,6 +66,7 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
         formLayout.setSpacing(10);
         
         titulo = new Text("Cadastro de Clientes");
+        titulo.setId("titulo");
         
         HBox nomeLayout = new HBox();
         nomeLayout.setSpacing(7);

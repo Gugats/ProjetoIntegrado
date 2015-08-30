@@ -7,6 +7,7 @@ package br.com.treg.presentation.view.impl;
 
 import br.com.treg.presentation.presenter.CadClientePresenter;
 import br.com.treg.presentation.presenter.CadFornecedorPresenter;
+import br.com.treg.presentation.presenter.CadOrcamentoPresenter;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -38,13 +39,14 @@ public class MainViewImpl extends BorderPane {
     //Presenters
     private CadFornecedorPresenter cadFornecedorPresenter;
     private CadClientePresenter cadClientePresenter;
+    private CadOrcamentoPresenter cadOrcamentoPresenter;
     
     private ColorPicker colorPicker;
     
     private HBox menuLayout;
     private MenuBar menu;
     private Menu menuFile, menuEdit, menuView;
-    private MenuItem itemCadFornecedor, itemCadCliente;
+    private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento;
     private Text pick;
     
     public MainViewImpl(){
@@ -53,16 +55,22 @@ public class MainViewImpl extends BorderPane {
         menuLayout.setSpacing(10);
         
         menu = new MenuBar();
-        menu.setStyle("-fx-background-color: #F0E68C;");
+        //menu.setStyle("-fx-background-color: #F0E68C;");
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         menu.setMinWidth(primaryScreenBounds.getWidth());
-        menuFile = new Menu("Cadastro");
         
+        
+        
+        menuFile = new Menu("Cadastro");
         itemCadFornecedor = new MenuItem("Fornecedor");
         itemCadCliente = new MenuItem("Cliente");
-        menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente);
+        itemCadOrcamento = new MenuItem("Orçamento");
+        menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente, itemCadOrcamento);
+        
         
         menuEdit = new Menu("Edit");
+        
+        
         menuView = new Menu("View");
         
         menu.getMenus().addAll(menuFile, menuEdit, menuView);
@@ -70,6 +78,7 @@ public class MainViewImpl extends BorderPane {
         
         cadFornecedorPresenter = new CadFornecedorPresenter();
         cadClientePresenter = new CadClientePresenter();
+        cadOrcamentoPresenter = new CadOrcamentoPresenter();
         
         itemCadFornecedor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -82,6 +91,13 @@ public class MainViewImpl extends BorderPane {
             @Override
             public void handle(ActionEvent e) {
                 setCenter((Parent)cadClientePresenter.getView());
+            }
+        });
+        
+        itemCadOrcamento.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setCenter((Parent)cadOrcamentoPresenter.getView());
             }
         });
    
