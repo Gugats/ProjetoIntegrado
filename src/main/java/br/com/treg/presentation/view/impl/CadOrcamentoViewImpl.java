@@ -50,7 +50,7 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
     private TreeTableView<Item> tabela;
     private List<Item> listaItem = new ArrayList<>();
 
-    final TreeItem<Item> root = new TreeItem<>(new Item("Lista de Itens"));
+    final TreeItem<Item> root = new TreeItem<>(new Item());
 
     @Override
     public void addListener(CadOrcamentoViewListener listener) {
@@ -186,14 +186,32 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
         addMenuItem.setOnAction(new EventHandler() {
             @Override
             public void handle(Event t) {
-                TreeItem<Item> novoItem
-                        = new TreeItem(new Item("Novo Item"));
+                Item item = new Item("awef", "awfr");
+
+                TreeItem<Item> novoItem = new TreeItem(item);
                 tabela.getRoot().getChildren().add(novoItem);
+                int j = 1;
                 if (novoItem.getParent().equals(tabela.getRoot())) {
                     novoItem.setExpanded(true);
+                    
+                    ObservableList<TreeItem<Item>> lista = FXCollections.observableArrayList(tabela.getRoot().getChildren());
+
+                    if(lista.size() > 0){
+                        j=0;
+                        for (TreeItem<Item> i : lista) {
+                            if (i.isExpanded()) {
+                                j++;
+                            }
+                        }
+                    }
                 } else {
                     novoItem.setExpanded(false);
                 }
+
+                item.setItem(j + ".0");
+                item.setDiscriminacao("Novo Item");
+                novoItem.setValue(item);
+                
             }
         });
 
@@ -220,7 +238,7 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                     @Override
                     public void handle(ActionEvent event) {
                         TreeItem<Item> novoItem
-                                = new TreeItem(new Item("Novo Sub-Item"));
+                                = new TreeItem(new Item("", "Novo Sub-Item"));
                         tabela.getTreeItem(index).getChildren().add(novoItem);
 
                         if (novoItem.getParent().equals(tabela.getRoot())) {
@@ -246,7 +264,7 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                 for (TreeItem<Item> i : lista) {
                     listaNova.add(i.getValue());
                     ObservableList<TreeItem<Item>> listaT = FXCollections.observableArrayList(i.getChildren());
-                    for(TreeItem<Item> j : listaT){
+                    for (TreeItem<Item> j : listaT) {
                         listaNova.add(j.getValue());
                     }
                 }
