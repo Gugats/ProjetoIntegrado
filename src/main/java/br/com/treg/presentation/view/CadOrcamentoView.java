@@ -5,6 +5,10 @@
  */
 package br.com.treg.presentation.view;
 
+import br.com.treg.business.model.Item;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
+
 /**
  *
  * @author Gustavo
@@ -16,5 +20,7 @@ public interface CadOrcamentoView {
     }
     
     void addListener(CadOrcamentoViewListener listener);
+    
+    void ordenaItensTabela(ObservableList<TreeItem<Item>> lista);
     
 }

@@ -16,15 +16,19 @@ public class Item {
     
     StringProperty item, discriminacao, qtd, unidadeMedida, material, maoObra, total;
 
-    public Item(String dsc) {
+    public Item(String dsc, String i) {
         
         discriminacao = new SimpleStringProperty(dsc);
-        item = new SimpleStringProperty();
+        item = new SimpleStringProperty(i);
         qtd = new SimpleStringProperty();
         unidadeMedida = new SimpleStringProperty();
         material = new SimpleStringProperty();
         maoObra = new SimpleStringProperty();
         total = new SimpleStringProperty();
+        
+    }
+    
+    public Item(){
         
     }
 

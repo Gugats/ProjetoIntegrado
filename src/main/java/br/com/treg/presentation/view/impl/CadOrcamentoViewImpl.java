@@ -193,11 +193,11 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                 int j = 1;
                 if (novoItem.getParent().equals(tabela.getRoot())) {
                     novoItem.setExpanded(true);
-                    
+
                     ObservableList<TreeItem<Item>> lista = FXCollections.observableArrayList(tabela.getRoot().getChildren());
 
-                    if(lista.size() > 0){
-                        j=0;
+                    if (lista.size() > 0) {
+                        j = 0;
                         for (TreeItem<Item> i : lista) {
                             if (i.isExpanded()) {
                                 j++;
@@ -211,13 +211,17 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                 item.setItem(j + ".0");
                 item.setDiscriminacao("Novo Item");
                 novoItem.setValue(item);
-                
+
             }
         });
 
         MenuItem addSubMenuItem = new MenuItem("Novo sub item");
         addItem.getItems().add(addSubMenuItem);
         addSubMenuItem.setVisible(false);
+
+        MenuItem excluirItem = new MenuItem("Excluir");
+        addItem.getItems().add(excluirItem);
+        excluirItem.setVisible(false);
 
         tabela.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -227,6 +231,7 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                 if (index == -1) {
                     addSubMenuItem.setVisible(false);
                 } else {
+                    excluirItem.setVisible(true);
                     if (tabela.getSelectionModel().getModelItem(index).isExpanded()) {
                         addSubMenuItem.setVisible(true);
                     } else {
@@ -237,18 +242,39 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
                 addSubMenuItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        TreeItem<Item> novoItem
-                                = new TreeItem(new Item("", "Novo Sub-Item"));
+                        Item item = new Item("awef", "awfr");
+                        TreeItem<Item> novoItem = new TreeItem(item);
                         tabela.getTreeItem(index).getChildren().add(novoItem);
 
                         if (novoItem.getParent().equals(tabela.getRoot())) {
                             novoItem.setExpanded(true);
                         } else {
+                            String n = novoItem.getParent().getValue().getItem().substring(0, 1);
+
+                            ObservableList<TreeItem<Item>> lista = FXCollections.observableArrayList(novoItem.getParent().getChildren());
+
+                            item.setItem(n + "." + lista.size());
+                            item.setDiscriminacao("Novo Sub-Item");
+                            novoItem.setValue(item);
                             novoItem.setExpanded(false);
                         }
                     }
                 });
 
+                excluirItem.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        
+                        if(tabela.getSelectionModel().getModelItem(index).isExpanded()){
+                            tabela.getRoot().getChildren().remove(tabela.getSelectionModel().getModelItem(index));
+                        }else{
+                            tabela.getSelectionModel().getModelItem(index).getParent().getChildren().remove(tabela.getSelectionModel().getModelItem(index));
+                        }
+                        
+                        ordenaItensTabela(tabela.getRoot().getChildren());
+                    }
+                });
             }
         });
 
@@ -273,5 +299,24 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
         });
 
         this.getChildren().addAll(tabela, salvar);
+    }
+
+    @Override
+    public void ordenaItensTabela(ObservableList<TreeItem<Item>> lista) {
+        
+        int i = 1;
+        
+        for(TreeItem<Item> ti : lista){
+            if(ti.isExpanded()){
+                ti.getValue().setItem(i+".0");
+                int j=1;
+                for(TreeItem<Item> h : ti.getChildren()){
+                    h.getValue().setItem(i+"."+j);
+                    j++;
+                }
+            }
+            i++;
+        }
+        
     }
 }
