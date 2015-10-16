@@ -47,6 +47,8 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
 
     List<CadOrcamentoViewListener> listeners = new ArrayList<CadOrcamentoViewListener>();
 
+    Item itemQtd, itemMao, itemMaterial;
+    
     private TreeTableView<Item> tabela;
     private List<Item> listaItem = new ArrayList<>();
 
@@ -103,8 +105,8 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
         qtdCol.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<Item, String>>() {
             @Override
             public void handle(TreeTableColumn.CellEditEvent<Item, String> event) {
-                final Item item = event.getRowValue().getValue();
-                item.setQtd(event.getNewValue());
+                itemQtd = event.getRowValue().getValue();
+                itemQtd.setQtd(event.getNewValue());
             }
         });
 
@@ -119,7 +121,8 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
             @Override
             public void handle(TreeTableColumn.CellEditEvent<Item, String> event) {
                 final Item item = event.getRowValue().getValue();
-                item.setUnidadeMedida(event.getNewValue());
+                item.setUnidadeMedida(item.getQtd());
+                
             }
         });
 
@@ -133,8 +136,8 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
         materialCol.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<Item, String>>() {
             @Override
             public void handle(TreeTableColumn.CellEditEvent<Item, String> event) {
-                final Item item = event.getRowValue().getValue();
-                item.setMaterial(event.getNewValue());
+                itemMaterial = event.getRowValue().getValue();
+                itemMaterial.setMaterial(event.getNewValue());
             }
         });
 
@@ -148,8 +151,8 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
         maoCol.setOnEditCommit(new EventHandler<TreeTableColumn.CellEditEvent<Item, String>>() {
             @Override
             public void handle(TreeTableColumn.CellEditEvent<Item, String> event) {
-                final Item item = event.getRowValue().getValue();
-                item.setMaoObra(event.getNewValue());
+                itemMao = event.getRowValue().getValue();
+                itemMao.setMaoObra(event.getNewValue());
             }
         });
 
@@ -164,7 +167,11 @@ public class CadOrcamentoViewImpl extends VBox implements CadOrcamentoView {
             @Override
             public void handle(TreeTableColumn.CellEditEvent<Item, String> event) {
                 final Item item = event.getRowValue().getValue();
-                item.setTotal(event.getNewValue());
+                Double valorMao = Double.parseDouble(itemMao.getMaoObra());
+                Double valorMat = Double.parseDouble(itemMaterial.getMaterial());
+                Double total = valorMao + valorMat;
+                item.setTotal(total.toString());
+                
             }
         });
 
