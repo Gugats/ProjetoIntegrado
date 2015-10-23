@@ -6,6 +6,8 @@
     <class>br.com.treg.business.model.Cliente</class>
     <class>br.com.treg.business.model.Obra</class>
     <class>br.com.treg.business.model.Funcionario</class>
+    <class>br.com.treg.business.model.ObraFuncionario</class>
+    <class>br.com.treg.business.model.NotaFiscal</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

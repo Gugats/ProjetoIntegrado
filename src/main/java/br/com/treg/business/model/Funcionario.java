@@ -6,6 +6,8 @@
 package br.com.treg.business.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,16 +15,21 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +40,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Funcionario.findAll", query = "SELECT f FROM Funcionario f")})
 public class Funcionario implements Serializable {
+
     private static final long serialVersionUID = 1L;
     
     private IntegerProperty id;
@@ -41,6 +49,7 @@ public class Funcionario implements Serializable {
     private StringProperty endereco;
     private StringProperty funcao;
     private BooleanProperty ativo;
+    private List<ObraFuncionario> obrasFuncionarios;
 
     public Funcionario() {
         id = new SimpleIntegerProperty();
@@ -124,6 +133,15 @@ public class Funcionario implements Serializable {
         return this.ativo;
     }
 
+    @OneToMany(mappedBy="funcionario")
+    public List<ObraFuncionario> getObrasFuncionarios() {
+        return obrasFuncionarios;
+    }
+
+    public void setObrasFuncionarios(List<ObraFuncionario> obrasFuncionarios) {
+        this.obrasFuncionarios = obrasFuncionarios;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -148,5 +166,5 @@ public class Funcionario implements Serializable {
     public String toString() {
         return nome.get();
     }
-    
+
 }

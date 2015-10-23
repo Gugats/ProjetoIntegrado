@@ -7,6 +7,7 @@ package br.com.treg.business.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -23,11 +24,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,6 +44,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Obra.findAll", query = "SELECT o FROM Obra o")})
 public class Obra implements Serializable {
+
     private static final long serialVersionUID = 1L;
     
     private IntegerProperty id;
@@ -45,8 +52,10 @@ public class Obra implements Serializable {
     private DoubleProperty custoFinal;
     private DoubleProperty custoInicial;
     private BooleanProperty ativo;
-    private BooleanProperty finalizado;
+    private StringProperty status;
     private List<Orcamento> orcamentos;
+    private List<ObraFuncionario> obrasFuncionarios;
+    private Cliente cliente;
 
     public Obra() {
         id = new SimpleIntegerProperty();
@@ -54,7 +63,7 @@ public class Obra implements Serializable {
         custoFinal = new SimpleDoubleProperty();
         custoInicial = new SimpleDoubleProperty();
         ativo = new SimpleBooleanProperty();
-        finalizado = new SimpleBooleanProperty();
+        status = new SimpleStringProperty();
     }
 
     @Id
@@ -115,22 +124,22 @@ public class Obra implements Serializable {
         return this.ativo;
     }
     
-    @Column(name = "finalizado")
-    public Boolean getFinalizado() {
-        return finalizadoProperty().get();
+    @Column(name = "status")
+    public String getStatus() {
+        return statusProperty().get();
     }
-    public void setFinalizado(Boolean finalizado) {
-        finalizadoProperty().set(finalizado);
+    public void setStatus(String status) {
+        statusProperty().set(status);
     }
-    public BooleanProperty finalizadoProperty(){
-        return this.finalizado;
+    public StringProperty statusProperty(){
+        return this.status;
     }
 
     @OneToMany(mappedBy="obra", targetEntity = Orcamento.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<Orcamento> getOrcamento() {
+    public List<Orcamento> getOrcamentos() {
         return orcamentos;
     }
-    public void setOrcamento(List<Orcamento> orcamentos) {
+    public void setOrcamentos(List<Orcamento> orcamentos) {
         this.orcamentos = orcamentos;
     }
     public void addOrcamento(Orcamento o){
@@ -144,6 +153,29 @@ public class Obra implements Serializable {
             this.orcamentos.remove(o);
     }
 
+    @OneToMany(mappedBy="obra", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    public List<ObraFuncionario> getObrasFuncionarios() {
+        return obrasFuncionarios;
+    }
+    public void setObrasFuncionarios(List<ObraFuncionario> obrasFuncionarios) {
+        this.obrasFuncionarios = obrasFuncionarios;
+    }
+    public void addObraFuncionario(ObraFuncionario o){
+        if(this.obrasFuncionarios==null){
+            this.obrasFuncionarios = new ArrayList<>();
+        }
+        this.obrasFuncionarios.add(o);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "cliente")
+    public Cliente getCliente() {
+        return cliente;
+    }
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -168,5 +200,14 @@ public class Obra implements Serializable {
     public String toString() {
         return "br.com.treg.business.model.Obra[ id=" + id + " ]";
     }
+
+//    @XmlTransient
+//    public Collection<ObraFuncionario> getObraFuncionarioCollection() {
+//        return obraFuncionarioCollection;
+//    }
+//
+//    public void setObraFuncionarioCollection(Collection<ObraFuncionario> obraFuncionarioCollection) {
+//        this.obraFuncionarioCollection = obraFuncionarioCollection;
+//    }
     
 }

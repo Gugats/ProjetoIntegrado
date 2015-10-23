@@ -24,6 +24,7 @@ public class CadFuncionarioPresenter implements CadFuncionarioView.CadFuncionari
         this.view.addListener(this);
         
         bo = new FuncionarioBO();
+        this.view.populaListaFuncionarios(bo.listAll());
     }
 
     @Override

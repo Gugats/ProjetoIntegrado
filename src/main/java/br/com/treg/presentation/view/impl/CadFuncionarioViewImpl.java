@@ -98,6 +98,7 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
         formLayout.getChildren().add(funcaoLayout);
 
         checkAtivo = new CheckBox("Ativo");
+        checkAtivo.setSelected(true);
         formLayout.getChildren().add(checkAtivo);
         
         HBox botoesLayout = new HBox();
@@ -214,7 +215,7 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
         tfCPF.setText("");
         tfEndereco.setText("");
         tfFuncao.setText("");
-        checkAtivo.setSelected(false);
+        checkAtivo.setSelected(true);
         tabela.getSelectionModel().select(null);
         excluir.setDisable(true);
         funcionario = new Funcionario();

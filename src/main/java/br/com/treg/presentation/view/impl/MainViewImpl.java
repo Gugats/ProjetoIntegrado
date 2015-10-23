@@ -8,7 +8,10 @@ package br.com.treg.presentation.view.impl;
 import br.com.treg.presentation.presenter.CadClientePresenter;
 import br.com.treg.presentation.presenter.CadFornecedorPresenter;
 import br.com.treg.presentation.presenter.CadFuncionarioPresenter;
+import br.com.treg.presentation.presenter.CadNotaFiscalPresenter;
+import br.com.treg.presentation.presenter.CadObraPresenter;
 import br.com.treg.presentation.presenter.CadOrcamentoPresenter;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import org.controlsfx.control.TaskProgressView;
 
 /**
  *
@@ -42,6 +47,8 @@ public class MainViewImpl extends BorderPane {
     private CadClientePresenter cadClientePresenter;
     private CadOrcamentoPresenter cadOrcamentoPresenter;
     private CadFuncionarioPresenter cadFuncionarioPresenter;
+    private CadObraPresenter cadObraPresenter;
+    private CadNotaFiscalPresenter cadNotaFiscalPresenter;
     
     private ColorPicker colorPicker;
     
@@ -49,7 +56,7 @@ public class MainViewImpl extends BorderPane {
     private MenuBar menu;
     private Menu menuFile, menuEdit, menuView;
     private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-            itemCadFuncionario;
+            itemCadFuncionario, itemCadObra, itemCadNotaFiscal;
     private Text pick;
     
     public MainViewImpl(){
@@ -69,26 +76,23 @@ public class MainViewImpl extends BorderPane {
         itemCadCliente = new MenuItem("Cliente");
         itemCadOrcamento = new MenuItem("Orçamento");
         itemCadFuncionario = new MenuItem("Funcionario");
+        itemCadObra = new MenuItem("Obra");
+        itemCadNotaFiscal = new MenuItem("Nota Fiscal");
         menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-                itemCadFuncionario);
+                itemCadFuncionario, itemCadObra, itemCadNotaFiscal);
         
         
         menuEdit = new Menu("Edit");
-        
-        
         menuView = new Menu("View");
         
         menu.getMenus().addAll(menuFile, menuEdit, menuView);
         menuLayout.getChildren().add(menu);
         
-        cadFornecedorPresenter = new CadFornecedorPresenter();
-        cadClientePresenter = new CadClientePresenter();
-        cadOrcamentoPresenter = new CadOrcamentoPresenter();
-        cadFuncionarioPresenter = new CadFuncionarioPresenter();
         
         itemCadFornecedor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                cadFornecedorPresenter = new CadFornecedorPresenter();
                 setCenter((Parent)cadFornecedorPresenter.getView());
             }
         });
@@ -96,6 +100,7 @@ public class MainViewImpl extends BorderPane {
         itemCadCliente.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                cadClientePresenter = new CadClientePresenter();
                 setCenter((Parent)cadClientePresenter.getView());
             }
         });
@@ -103,6 +108,7 @@ public class MainViewImpl extends BorderPane {
         itemCadOrcamento.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                cadOrcamentoPresenter = new CadOrcamentoPresenter();
                 setCenter((Parent)cadOrcamentoPresenter.getView());
             }
         });
@@ -110,7 +116,24 @@ public class MainViewImpl extends BorderPane {
         itemCadFuncionario.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                cadFuncionarioPresenter = new CadFuncionarioPresenter();
                 setCenter((Parent)cadFuncionarioPresenter.getView());
+            }
+        });
+        
+        itemCadObra.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cadObraPresenter = new CadObraPresenter();
+                setCenter((Parent) cadObraPresenter.getView());
+            }
+        });
+        
+        itemCadNotaFiscal.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cadNotaFiscalPresenter = new CadNotaFiscalPresenter();
+                setCenter((Parent) cadNotaFiscalPresenter.getView());
             }
         });
    
