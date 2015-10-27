@@ -63,7 +63,7 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         titulo = new Text("Cadastro de Fornecedores");
         HBox nomeLayout = new HBox();
         nomeLayout.setSpacing(7);
-        lNome = new Label("Nome: ");
+        lNome = new Label("Razão Social: ");
         tfNome = new TextField();
         nomeLayout.getChildren().addAll(lNome, tfNome);
         nomeLayout.setAlignment(Pos.TOP_CENTER);
@@ -110,7 +110,7 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         tabela = new TableView();
         tabela.setMaxWidth(400);
         
-        TableColumn nome = new TableColumn("Nome");
+        TableColumn nome = new TableColumn("Razão Social");
         nome.setMinWidth(100);
         nome.setCellValueFactory(
                 new PropertyValueFactory<Fornecedor, StringProperty>("nome")

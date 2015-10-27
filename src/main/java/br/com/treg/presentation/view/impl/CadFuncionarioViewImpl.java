@@ -5,9 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
-import br.com.treg.business.model.Cliente;
 import br.com.treg.business.model.Funcionario;
-import br.com.treg.presentation.view.CadClienteView;
 import br.com.treg.presentation.view.CadFuncionarioView;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -36,10 +36,11 @@ public class CadFuncionarioPresenter implements CadFuncionarioView.CadFuncionari
     public void salvar(Funcionario funcionario) {
         try{
             bo.saveOrUpdate(funcionario);
+            this.view.sucesso("Funcionário salvo com sucesso!");
         }catch(RuntimeException re){
             this.view.falha("Falha ao salvar Funcionário");
         }
-        this.view.sucesso("Funcionário salvo com sucesso!");
+        
         this.view.populaListaFuncionarios(bo.listAll());
     }
 
@@ -47,10 +48,11 @@ public class CadFuncionarioPresenter implements CadFuncionarioView.CadFuncionari
     public void excluir(Funcionario funcionario) {
         try{
             bo.delete(funcionario);
+            this.view.sucesso("Funcionário excluido com sucesso!");
         }catch(RuntimeException e){
             this.view.falha("Ocorreu um erro ao realizar exclusão! Contate o administrador!");
         }
-        this.view.sucesso("Funcionário excluido com sucesso!");
+        
         this.view.populaListaFuncionarios(bo.listAll());
     }
     

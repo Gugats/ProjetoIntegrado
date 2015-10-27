@@ -7,12 +7,20 @@ package br.com.treg.business.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -37,66 +45,122 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NotaFiscal.findByTipoNota", query = "SELECT n FROM NotaFiscal n WHERE n.tipoNota = :tipoNota")})
 public class NotaFiscal implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Size(max = 350)
-    @Column(name = "discriminacao")
-    private String discriminacao;
-    @Column(name = "data_emissao")
-    @Temporal(TemporalType.DATE)
+    
+    private IntegerProperty id;
+    private StringProperty discriminacao;
     private Date dataEmissao;
-    @Size(max = 50)
-    @Column(name = "forma_pagamento")
-    private String formaPagamento;
-    @Size(max = 50)
-    @Column(name = "tipo_nota")
-    private String tipoNota;
+    private StringProperty formaPagamento;
+    private StringProperty tipoNota;
+    private DoubleProperty valor;
+    private Fornecedor fornecedor;
+    private Obra obra;
+    private IntegerProperty parcelas;
 
     public NotaFiscal() {
-        
+        id = new SimpleIntegerProperty();
+        discriminacao = new SimpleStringProperty();
+        formaPagamento = new SimpleStringProperty();
+        tipoNota = new SimpleStringProperty();
+        valor = new SimpleDoubleProperty();
+        parcelas = new SimpleIntegerProperty();
     }
 
-    public Integer getId() {
-        return id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    public final Integer getId() {
+        return idProperty().get();
     }
-
     public void setId(Integer id) {
-        this.id = id;
+        idProperty().set(id);
+    }
+    public IntegerProperty idProperty(){
+        return this.id;
     }
 
+    @Size(max = 350)
+    @Column(name = "discriminacao")
     public String getDiscriminacao() {
-        return discriminacao;
+        return discriminacaoProperty().get();
     }
-
     public void setDiscriminacao(String discriminacao) {
-        this.discriminacao = discriminacao;
+        discriminacaoProperty().set(discriminacao);
+    }
+    public StringProperty discriminacaoProperty(){
+        return this.discriminacao;
     }
 
+    @Column(name = "data_emissao")
+    @Temporal(TemporalType.DATE)
     public Date getDataEmissao() {
         return dataEmissao;
     }
-
     public void setDataEmissao(Date dataEmissao) {
         this.dataEmissao = dataEmissao;
     }
 
+    @Size(max = 50)
+    @Column(name = "forma_pagamento")
     public String getFormaPagamento() {
-        return formaPagamento;
+        return formaPagamentoProperty().get();
     }
-
     public void setFormaPagamento(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
+        formaPagamentoProperty().set(formaPagamento);
+    }
+    public StringProperty formaPagamentoProperty(){
+        return this.formaPagamento;
     }
 
+    @Size(max = 50)
+    @Column(name = "tipo_nota")
     public String getTipoNota() {
-        return tipoNota;
+        return tipoNotaProperty().get();
+    }
+    public void setTipoNota(String tipoNota) {
+        tipoNotaProperty().set(tipoNota);
+    }
+    public StringProperty tipoNotaProperty(){
+        return this.tipoNota;
+    }
+    
+    @Column(name = "valor")
+    public Double getValor(){
+        return valorProperty().get();
+    }
+    public void setValor(Double valor){
+        valorProperty().set(valor);
+    }
+    public DoubleProperty valorProperty(){
+        return this.valor;
     }
 
-    public void setTipoNota(String tipoNota) {
-        this.tipoNota = tipoNota;
+    @ManyToOne
+    @JoinColumn(name = "fornecedor")
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "obra")
+    public Obra getObra() {
+        return obra;
+    }
+    public void setObra(Obra obra) {
+        this.obra = obra;
+    }
+    
+    @Column(name = "parcelas")
+    public final Integer getParcelas() {
+        return parcelasProperty().get();
+    }
+    public void setParcelas(Integer parcelas) {
+        parcelasProperty().set(parcelas);
+    }
+    public IntegerProperty parcelasProperty(){
+        return this.parcelas;
     }
 
     @Override

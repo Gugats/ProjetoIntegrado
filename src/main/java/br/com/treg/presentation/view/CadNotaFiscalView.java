@@ -5,7 +5,10 @@
  */
 package br.com.treg.presentation.view;
 
+import br.com.treg.business.model.Fornecedor;
 import br.com.treg.business.model.NotaFiscal;
+import br.com.treg.business.model.Obra;
+import java.util.Collection;
 
 /**
  *
@@ -26,5 +29,11 @@ public interface CadNotaFiscalView {
     void falha(String msg);
     
     void sucesso(String msg);
+    
+    void populaComboFornecedores(Collection<Fornecedor> lista);
+    
+    void populaComboObras(Collection<Obra> lista);
+    
+    void populaListaNF(Collection<NotaFiscal> lista);
     
 }

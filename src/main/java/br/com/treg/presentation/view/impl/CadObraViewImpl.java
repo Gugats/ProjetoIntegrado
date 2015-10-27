@@ -29,6 +29,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -60,6 +61,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
     private ObservableList<Cliente> listaClientes;
     private ObservableList<Funcionario> listaFuncionarios;
     private ListSelectionView<Funcionario> twinCol;
+    private TextArea descricao;
     
     public CadObraViewImpl() {
         
@@ -87,6 +89,15 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
         enderecoLayout.setAlignment(Pos.TOP_CENTER);
         formLayout.getChildren().add(enderecoLayout);
+        
+        VBox descLayout = new VBox();
+        descLayout.setSpacing(7);
+        Label lDesc = new Label("Descrição: ");
+        descricao = new TextArea();
+        descricao.setMaxWidth(250);
+        descLayout.getChildren().addAll(lDesc, descricao);
+        descLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.getChildren().add(descLayout);
         
         HBox statusLayout = new HBox();
         statusLayout.setSpacing(7);
@@ -160,6 +171,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
                     comboCliente.setValue(obra.getCliente());
                     comboStatus.setValue(obra.getStatus());
                     checkAtivo.setSelected(obra.getAtivo());
+                    descricao.setText(obra.getDescricao());
                     excluir.setDisable(false);
                     List<Funcionario> listaF = new ArrayList<>();
                     
@@ -186,6 +198,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
                 obra.setEndereco(tfEndereco.getText());
                 obra.setCliente(comboCliente.getValue());
                 obra.setStatus(comboStatus.getValue());
+                obra.setDescricao(descricao.getText());
                 
                 for(Funcionario f : twinCol.getTargetItems()){
                     ObraFuncionario of = new ObraFuncionario();
@@ -255,6 +268,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         checkAtivo.setSelected(true);
         tabela.getSelectionModel().select(null);
         excluir.setDisable(true);
+        descricao.setText("");
         for(CadObraViewListener l : listeners)
             l.getListaFuncionarios();
         obra = new Obra();

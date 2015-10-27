@@ -49,6 +49,7 @@ public class Obra implements Serializable {
     
     private IntegerProperty id;
     private StringProperty endereco;
+    private StringProperty descricao;
     private DoubleProperty custoFinal;
     private DoubleProperty custoInicial;
     private BooleanProperty ativo;
@@ -64,6 +65,7 @@ public class Obra implements Serializable {
         custoInicial = new SimpleDoubleProperty();
         ativo = new SimpleBooleanProperty();
         status = new SimpleStringProperty();
+        descricao = new SimpleStringProperty();
     }
 
     @Id
@@ -134,6 +136,17 @@ public class Obra implements Serializable {
     public StringProperty statusProperty(){
         return this.status;
     }
+    
+    @Column(name = "descricao")
+    public String getDescricao(){
+        return descricaoProperty().get();
+    }
+    public void setDescricao(String descricao){
+        descricaoProperty().set(descricao);
+    }
+    public StringProperty descricaoProperty(){
+        return this.descricao;
+    }
 
     @OneToMany(mappedBy="obra", targetEntity = Orcamento.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Orcamento> getOrcamentos() {
@@ -198,16 +211,7 @@ public class Obra implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treg.business.model.Obra[ id=" + id + " ]";
+        return getDescricao();
     }
-
-//    @XmlTransient
-//    public Collection<ObraFuncionario> getObraFuncionarioCollection() {
-//        return obraFuncionarioCollection;
-//    }
-//
-//    public void setObraFuncionarioCollection(Collection<ObraFuncionario> obraFuncionarioCollection) {
-//        this.obraFuncionarioCollection = obraFuncionarioCollection;
-//    }
     
 }

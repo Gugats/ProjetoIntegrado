@@ -5,7 +5,9 @@
  */
 package br.com.treg.presentation.presenter;
 
+import br.com.treg.business.bo.FornecedorBO;
 import br.com.treg.business.bo.NotaFiscalBO;
+import br.com.treg.business.bo.ObraBO;
 import br.com.treg.business.model.NotaFiscal;
 import br.com.treg.presentation.view.CadNotaFiscalView;
 import br.com.treg.presentation.view.impl.CadNotaFiscalViewImpl;
@@ -20,10 +22,21 @@ public class CadNotaFiscalPresenter implements CadNotaFiscalView.CadNotaFiscalVi
     
     NotaFiscalBO bo;
     
+    ObraBO obraBO;
+    
+    FornecedorBO fornecedorBO;
+    
     public CadNotaFiscalPresenter() {
         this.view.addListener(this);
         
         bo = new NotaFiscalBO();
+        obraBO = new ObraBO();
+        fornecedorBO = new FornecedorBO();
+        
+        this.view.populaComboFornecedores(fornecedorBO.listAll());
+        this.view.populaComboObras(obraBO.listAll());
+        this.view.populaListaNF(bo.listAll());
+        
     }
 
     @Override
@@ -33,12 +46,26 @@ public class CadNotaFiscalPresenter implements CadNotaFiscalView.CadNotaFiscalVi
 
     @Override
     public void salvar(NotaFiscal nf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            bo.saveOrUpdate(nf);
+            this.view.sucesso("Nota Fiscal salva com sucesso!");
+        }catch(RuntimeException re){
+            this.view.falha("Falha ao salvar Nota Fiscal");
+        }
+        
+        this.view.populaListaNF(bo.listAll());
     }
 
     @Override
     public void excluir(NotaFiscal nf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            bo.delete(nf);
+            this.view.sucesso("Nota Fiscal excluida com sucesso!");
+        }catch(RuntimeException e){
+            this.view.falha("Ocorreu um erro ao realizar exclusão! Contate o administrador!");
+        }
+        
+        this.view.populaListaNF(bo.listAll());
     }
     
 }
