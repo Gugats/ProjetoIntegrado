@@ -16,11 +16,12 @@ import br.com.treg.presentation.view.impl.CadClienteViewImpl;
  */
 public class CadClientePresenter implements CadClienteView.CadClienteViewListener {
     
-    CadClienteView view = new CadClienteViewImpl();
+    CadClienteView view;
     
     ClienteBO bo;
     
     public CadClientePresenter(){
+        view = new CadClienteViewImpl();
         this.view.addListener(this);
         
         bo = new ClienteBO();

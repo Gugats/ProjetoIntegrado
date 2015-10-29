@@ -16,11 +16,12 @@ import br.com.treg.presentation.view.impl.CadFuncionarioViewImpl;
  */
 public class CadFuncionarioPresenter implements CadFuncionarioView.CadFuncionarioViewListener{
     
-    CadFuncionarioView view = new CadFuncionarioViewImpl();
+    CadFuncionarioView view;
     
     FuncionarioBO bo;
 
     public CadFuncionarioPresenter() {
+        view = new CadFuncionarioViewImpl();
         this.view.addListener(this);
         
         bo = new FuncionarioBO();

@@ -11,7 +11,6 @@ import br.com.treg.business.bo.ObraBO;
 import br.com.treg.business.model.Obra;
 import br.com.treg.presentation.view.CadObraView;
 import br.com.treg.presentation.view.impl.CadObraViewImpl;
-import javafx.concurrent.Task;
 
 /**
  *
@@ -19,7 +18,7 @@ import javafx.concurrent.Task;
  */
 public class CadObraPresenter implements CadObraView.CadObraViewListener{
 
-    CadObraView view = new CadObraViewImpl();
+    CadObraView view;
     
     ObraBO bo;
     
@@ -28,7 +27,7 @@ public class CadObraPresenter implements CadObraView.CadObraViewListener{
     FuncionarioBO funcionarioBO;
     
     public CadObraPresenter() {
-        
+        view = new CadObraViewImpl();
         this.view.addListener(this);
         
         bo = new ObraBO();
@@ -60,10 +59,10 @@ public class CadObraPresenter implements CadObraView.CadObraViewListener{
     public void excluir(Obra obra) {
          try{
             bo.delete(obra);
+            this.view.sucesso("Obra excluída com sucesso!");
         }catch(RuntimeException e){
             this.view.falha("Ocorreu um erro ao realizar exclusão! Contate o administrador!");
         }
-        this.view.sucesso("Obra excluída com sucesso!");
         this.view.populaListaObras(bo.listAll());
     }
 

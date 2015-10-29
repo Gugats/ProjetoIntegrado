@@ -17,10 +17,11 @@ import br.com.treg.presentation.view.impl.CadFornecedorViewImpl;
  */
 public class CadFornecedorPresenter implements CadFornecedorViewListener {
     
-    CadFornecedorView view = new CadFornecedorViewImpl();
+    CadFornecedorView view;
     FornecedorBO bo;
     
     public CadFornecedorPresenter(){
+        view = new CadFornecedorViewImpl();
         this.view.addListener(this);
         bo = new FornecedorBO();
         

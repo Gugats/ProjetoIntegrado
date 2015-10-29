@@ -14,9 +14,10 @@ import br.com.treg.presentation.view.impl.CadOrcamentoViewImpl;
  */
 public class CadOrcamentoPresenter implements CadOrcamentoView.CadOrcamentoViewListener{
 
-    CadOrcamentoView view = new CadOrcamentoViewImpl();
+    CadOrcamentoView view;
     
     public CadOrcamentoPresenter() {
+        view = new CadOrcamentoViewImpl();
         this.view.addListener(this);
     }
     

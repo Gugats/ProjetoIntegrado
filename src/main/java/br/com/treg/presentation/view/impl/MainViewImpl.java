@@ -5,6 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
+import br.com.treg.presentation.presenter.CadBoletoPresenter;
 import br.com.treg.presentation.presenter.CadClientePresenter;
 import br.com.treg.presentation.presenter.CadFornecedorPresenter;
 import br.com.treg.presentation.presenter.CadFuncionarioPresenter;
@@ -49,6 +50,7 @@ public class MainViewImpl extends BorderPane {
     private CadFuncionarioPresenter cadFuncionarioPresenter;
     private CadObraPresenter cadObraPresenter;
     private CadNotaFiscalPresenter cadNotaFiscalPresenter;
+    private CadBoletoPresenter cadBoletoPresenter;
     
     private ColorPicker colorPicker;
     
@@ -56,7 +58,7 @@ public class MainViewImpl extends BorderPane {
     private MenuBar menu;
     private Menu menuFile, menuEdit, menuView;
     private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-            itemCadFuncionario, itemCadObra, itemCadNotaFiscal;
+            itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto;
     private Text pick;
     
     public MainViewImpl(){
@@ -78,8 +80,9 @@ public class MainViewImpl extends BorderPane {
         itemCadFuncionario = new MenuItem("Funcionario");
         itemCadObra = new MenuItem("Obra");
         itemCadNotaFiscal = new MenuItem("Nota Fiscal");
+        itemCadBoleto = new MenuItem("Boleto");
         menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-                itemCadFuncionario, itemCadObra, itemCadNotaFiscal);
+                itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto);
         
         
         menuEdit = new Menu("Edit");
@@ -134,6 +137,14 @@ public class MainViewImpl extends BorderPane {
             public void handle(ActionEvent event) {
                 cadNotaFiscalPresenter = new CadNotaFiscalPresenter();
                 setCenter((Parent) cadNotaFiscalPresenter.getView());
+            }
+        });
+        
+        itemCadBoleto.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cadBoletoPresenter = new CadBoletoPresenter();
+                setCenter((Parent) cadBoletoPresenter.getView());
             }
         });
    

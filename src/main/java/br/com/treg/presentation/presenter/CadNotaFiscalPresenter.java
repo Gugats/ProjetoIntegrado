@@ -18,7 +18,7 @@ import br.com.treg.presentation.view.impl.CadNotaFiscalViewImpl;
  */
 public class CadNotaFiscalPresenter implements CadNotaFiscalView.CadNotaFiscalViewListener{
 
-    CadNotaFiscalView view = new CadNotaFiscalViewImpl();
+    CadNotaFiscalView view;
     
     NotaFiscalBO bo;
     
@@ -27,6 +27,7 @@ public class CadNotaFiscalPresenter implements CadNotaFiscalView.CadNotaFiscalVi
     FornecedorBO fornecedorBO;
     
     public CadNotaFiscalPresenter() {
+        view = new CadNotaFiscalViewImpl();
         this.view.addListener(this);
         
         bo = new NotaFiscalBO();

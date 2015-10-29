@@ -185,7 +185,7 @@ public class NotaFiscal implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treg.business.model.NotaFiscal[ id=" + id + " ]";
+        return obra +" - "+ fornecedor;
     }
     
 }
