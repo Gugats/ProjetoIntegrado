@@ -115,6 +115,13 @@
             <artifactId>fontawesomefx</artifactId>
             <version>8.6</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.7</version>
+        </dependency>
+
 
         
     </dependencies>

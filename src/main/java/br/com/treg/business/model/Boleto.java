@@ -46,6 +46,7 @@ public class Boleto implements Serializable {
     private NotaFiscal notaFiscal;
     private Date dataEmissao;
     private Date dataVencimento;
+    private Date dataPagamento;
     private BooleanProperty pago;
     private IntegerProperty parcela;
 
@@ -84,6 +85,15 @@ public class Boleto implements Serializable {
     }
     public void setDataVencimento(Date dataVencimento) {
         this.dataVencimento = dataVencimento;
+    }
+
+    @Column(name = "data_pagamento")
+    @Temporal(TemporalType.DATE)
+    public Date getDataPagamento() {
+        return dataPagamento;
+    }
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
     }
     
     @Column(name = "parcela")
@@ -139,7 +149,7 @@ public class Boleto implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treg.business.model.Boleto[ id=" + id + " ]";
+        return getNotaFiscal() + " - Data Vencimento: " + getDataVencimento();
     }
     
 }

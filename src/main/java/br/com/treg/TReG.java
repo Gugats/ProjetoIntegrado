@@ -1,9 +1,11 @@
 package br.com.treg;
 
+import br.com.treg.presentation.presenter.MainViewPresenter;
 import br.com.treg.presentation.view.impl.MainViewImpl;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -22,9 +24,9 @@ public class TReG extends Application {
         stage.setWidth(primaryScreenBounds.getWidth());
         stage.setHeight(primaryScreenBounds.getHeight());
         
-        MainViewImpl view = new MainViewImpl();
+        MainViewPresenter viewPresenter = new MainViewPresenter();
         
-        Scene scene = new Scene(view, 500, 200);
+        Scene scene = new Scene((Parent)viewPresenter.getView(), 500, 200);
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("TR&G");

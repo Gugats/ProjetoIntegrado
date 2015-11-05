@@ -34,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
@@ -53,7 +54,7 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
     private ObservableList<Integer> listaParcelas;
     private ObservableList<Boleto> listaBoleto;
     private DatePicker dataEmissao;
-    private DatePicker dataVencimento;
+    private DatePicker dataVencimento, dataPagamento;
     private CheckBox pago;
     private TableView<Boleto> tabela;
     private Button salvar, cancelar, excluir;
@@ -101,6 +102,25 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         pago.setSelected(false);
         formLayout.getChildren().add(pago);
         
+        final HBox dataPagamentoLayout = new HBox();
+        dataPagamentoLayout.setVisible(false);
+        dataPagamentoLayout.setSpacing(7);
+        Label lDataPagamento = new Label("Data de Pagamento: ");
+        dataPagamento = new DatePicker();
+        dataPagamentoLayout.getChildren().addAll(lDataPagamento, dataPagamento);
+        dataPagamentoLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.getChildren().add(dataPagamentoLayout);
+        
+        pago.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(pago.isSelected()){
+                    dataPagamentoLayout.setVisible(true);
+                }else{
+                    dataPagamentoLayout.setVisible(false);
+                }
+            }
+        });
         
         comboNF.valueProperty().addListener(new ChangeListener<NotaFiscal>() {
             @Override
@@ -197,6 +217,8 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
                     l.salvar(boleto);
                 }
                 limparForm();
+//                BorderPane parent = (BorderPane) getParent();
+                
             }
         });
         
@@ -255,6 +277,7 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         comboNF.setValue(null);
         pago.setSelected(false);
         dataEmissao.setValue(null);
+        dataPagamento.setValue(null);
         dataVencimento.setValue(null);
         
     }

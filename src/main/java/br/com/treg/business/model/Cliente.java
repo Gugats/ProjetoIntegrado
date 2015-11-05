@@ -50,6 +50,8 @@ public class Cliente implements Serializable {
     private StringProperty nome;
     private StringProperty endereco;
     private StringProperty tipoCliente;
+    private StringProperty email;
+    private StringProperty telefone;
 
     public Cliente() {
         id = new SimpleIntegerProperty();
@@ -57,6 +59,8 @@ public class Cliente implements Serializable {
         nome = new SimpleStringProperty();
         endereco = new SimpleStringProperty();
         tipoCliente = new SimpleStringProperty();
+        email = new SimpleStringProperty();
+        telefone = new SimpleStringProperty();
     }
 
     @Id
@@ -93,6 +97,28 @@ public class Cliente implements Serializable {
     }
     public StringProperty nomeProperty() {
         return this.nome;
+    }
+    
+    @Column(name = "telefone")
+    public final String getTelefone() {
+        return telefoneProperty().get();
+    }
+    public void setTelefone(String telefone) {
+        telefoneProperty().set(telefone);
+    }
+    public StringProperty telefoneProperty() {
+        return this.telefone;
+    }
+    
+    @Column(name = "email")
+    public final String getEmail() {
+        return emailProperty().get();
+    }
+    public void setEmail(String email) {
+        emailProperty().set(email);
+    }
+    public StringProperty emailProperty() {
+        return this.email;
     }
     
     @Column(name = "endereco")

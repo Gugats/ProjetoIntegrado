@@ -291,7 +291,6 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         listaFuncionarios = FXCollections.observableArrayList(lista);
         twinCol.getSourceItems().clear();
         twinCol.getSourceItems().addAll(listaFuncionarios);
-        twinCol.getTargetItems().clear();
     }
     
 }

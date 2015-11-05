@@ -46,10 +46,10 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
     //Elementos do Form
     private VBox formLayout, tabelaLayout;
     private Text titulo;
-    private Label lNome, lNumDoc, lEndereco, lTipoCliente;
+    private Label lNome, lNumDoc, lEndereco, lTipoCliente, lTelefone, lEmail;
     private ComboBox<String> comboTipoCliente;
     private Button salvar, cancelar, excluir;
-    private TextField tfNome, tfNumDoc, tfEndereco;
+    private TextField tfNome, tfNumDoc, tfEndereco, tfTelefone, tfEmail;
     private Cliente cliente = new Cliente();
     private TableView<Cliente> tabela;
     private ObservableList<Cliente> listaClientes;
@@ -81,6 +81,20 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
         tfEndereco = new TextField();
         enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
         enderecoLayout.setAlignment(Pos.TOP_CENTER);
+        
+        HBox telefoneLayout = new HBox();
+        telefoneLayout.setSpacing(7);
+        lTelefone = new Label("Telefone: ");
+        tfTelefone = new TextField();
+        telefoneLayout.getChildren().addAll(lTelefone, tfTelefone);
+        telefoneLayout.setAlignment(Pos.TOP_CENTER);
+        
+        HBox emailLayout = new HBox();
+        emailLayout.setSpacing(7);
+        lEmail = new Label("E-mail: ");
+        tfEmail = new TextField();
+        emailLayout.getChildren().addAll(lEmail, tfEmail);
+        emailLayout.setAlignment(Pos.TOP_CENTER);
         
         HBox tipoClienteLayout = new HBox();
         tipoClienteLayout.setSpacing(7);
@@ -125,7 +139,7 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
         botoesLayout.setAlignment(Pos.TOP_CENTER);
         
         tabela = new TableView();
-        tabela.setMaxWidth(500);
+        tabela.setMaxWidth(700);
         
         TableColumn nome = new TableColumn("Nome");
         nome.setMinWidth(100);
@@ -151,7 +165,19 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                 new PropertyValueFactory<Cliente, StringProperty>("endereco")
         );
         
-        tabela.getColumns().addAll(nome, endereco, tipoCli, numCli);
+        TableColumn fone = new TableColumn("Telefone");
+        fone.setMinWidth(100);
+        fone.setCellValueFactory(
+                new PropertyValueFactory<Cliente, StringProperty>("telefone")
+        );
+        
+        TableColumn email = new TableColumn("Email");
+        email.setMinWidth(100);
+        email.setCellValueFactory(
+                new PropertyValueFactory<Cliente, StringProperty>("email")
+        );
+        
+        tabela.getColumns().addAll(nome, endereco, fone, email, tipoCli, numCli);
         
         tabelaLayout = new VBox();
         tabelaLayout.setSpacing(10);
@@ -165,6 +191,8 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                 tfNome.setText(cliente.getNome());
                 tfNumDoc.setText(cliente.getNumdoc());
                 tfEndereco.setText(cliente.getEndereco());
+                tfTelefone.setText(cliente.getTelefone());
+                tfEmail.setText(cliente.getEmail());
                 comboTipoCliente.setValue(cliente.getTipoCliente());
                 excluir.setDisable(false);
             }
@@ -178,6 +206,8 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                 cliente.setTipoCliente(comboTipoCliente.getValue());
                 cliente.setNumdoc(tfNumDoc.getText());
                 cliente.setEndereco(tfEndereco.getText());
+                cliente.setEmail(tfEmail.getText());
+                cliente.setTelefone(tfTelefone.getText());
                 
                 for(CadClienteView.CadClienteViewListener l : listeners) {
                     l.salvar(cliente);
@@ -195,6 +225,8 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                 tfNome.setText("");
                 tfNumDoc.setText("");
                 tfEndereco.setText("");
+                tfTelefone.setText("");
+                tfEmail.setText("");
                 comboTipoCliente.setValue(null);
                 excluir.setDisable(true);
                 cliente = new Cliente();
@@ -224,6 +256,8 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                     tfNome.setText("");
                     tfNumDoc.setText("");
                     tfEndereco.setText("");
+                    tfTelefone.setText("");
+                    tfEmail.setText("");
                     comboTipoCliente.setValue(null);
                     excluir.setDisable(true);
                     cliente = new Cliente();
@@ -234,7 +268,7 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
             }
         });
         
-        formLayout.getChildren().addAll(titulo, nomeLayout, enderecoLayout, tipoClienteLayout, numDocLayout, botoesLayout, tabelaLayout);
+        formLayout.getChildren().addAll(titulo, nomeLayout, enderecoLayout, telefoneLayout, emailLayout, tipoClienteLayout, numDocLayout, botoesLayout, tabelaLayout);
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
     }

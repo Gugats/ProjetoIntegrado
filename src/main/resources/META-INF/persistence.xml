@@ -9,6 +9,7 @@
     <class>br.com.treg.business.model.ObraFuncionario</class>
     <class>br.com.treg.business.model.NotaFiscal</class>
     <class>br.com.treg.business.model.Boleto</class>
+    <class>br.com.treg.business.model.Recibo</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

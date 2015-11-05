@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -49,7 +51,9 @@ public class Funcionario implements Serializable {
     private StringProperty endereco;
     private StringProperty funcao;
     private BooleanProperty ativo;
+    private DoubleProperty diaria;
     private List<ObraFuncionario> obrasFuncionarios;
+    private StringProperty telefone;
 
     public Funcionario() {
         id = new SimpleIntegerProperty();
@@ -58,6 +62,8 @@ public class Funcionario implements Serializable {
         endereco = new SimpleStringProperty();
         funcao = new SimpleStringProperty();
         ativo = new SimpleBooleanProperty();
+        telefone = new SimpleStringProperty();
+        diaria = new SimpleDoubleProperty();
     }
 
     @Id
@@ -110,6 +116,28 @@ public class Funcionario implements Serializable {
         return this.endereco;
     }
     
+    @Column(name = "telefone")
+    public final String getTelefone() {
+        return telefoneProperty().get();
+    }
+    public void setTelefone(String telefone) {
+        telefoneProperty().set(telefone);
+    }
+    public StringProperty telefoneProperty() {
+        return this.telefone;
+    }
+    
+    @Column(name = "valor_diaria")
+    public final Double getDiaria(){
+        return diariaProperty().get();
+    }
+    public void setDiaria(Double diaria){
+        diariaProperty().set(diaria);
+    }
+    public DoubleProperty diariaProperty(){
+        return this.diaria;
+    }
+    
     @Size(max = 75)
     @Column(name = "funcao")
     public String getFuncao() {
@@ -132,6 +160,7 @@ public class Funcionario implements Serializable {
     public BooleanProperty ativoProperty(){
         return this.ativo;
     }
+    
 
     @OneToMany(mappedBy="funcionario")
     public List<ObraFuncionario> getObrasFuncionarios() {

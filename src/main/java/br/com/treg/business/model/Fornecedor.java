@@ -39,19 +39,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Fornecedor.findByEndereco", query = "SELECT f FROM Fornecedor f WHERE f.endereco = :endereco")})
 public class Fornecedor implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     private IntegerProperty id;
-    
     private StringProperty cnpj;
-    
     private StringProperty nome;
-    
     private StringProperty endereco;
+    private StringProperty email;
+    private StringProperty telefone;
 
     public Fornecedor() {
         id = new SimpleIntegerProperty();
         cnpj = new SimpleStringProperty();
         nome = new SimpleStringProperty();
         endereco = new SimpleStringProperty();
+        email = new SimpleStringProperty();
+        telefone = new SimpleStringProperty();
     }
 
     //Getters and Setters for ID
@@ -102,6 +104,28 @@ public class Fornecedor implements Serializable {
     }
     public StringProperty enderecoProperty() {
         return this.endereco;
+    }
+    
+    @Column(name = "telefone")
+    public final String getTelefone() {
+        return telefoneProperty().get();
+    }
+    public void setTelefone(String telefone) {
+        telefoneProperty().set(telefone);
+    }
+    public StringProperty telefoneProperty() {
+        return this.telefone;
+    }
+    
+    @Column(name = "email")
+    public final String getEmail() {
+        return emailProperty().get();
+    }
+    public void setEmail(String email) {
+        emailProperty().set(email);
+    }
+    public StringProperty emailProperty() {
+        return this.email;
     }
     
     @Override

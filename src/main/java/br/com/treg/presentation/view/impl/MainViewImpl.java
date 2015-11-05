@@ -5,6 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
+import br.com.treg.business.model.Boleto;
 import br.com.treg.presentation.presenter.CadBoletoPresenter;
 import br.com.treg.presentation.presenter.CadClientePresenter;
 import br.com.treg.presentation.presenter.CadFornecedorPresenter;
@@ -12,6 +13,11 @@ import br.com.treg.presentation.presenter.CadFuncionarioPresenter;
 import br.com.treg.presentation.presenter.CadNotaFiscalPresenter;
 import br.com.treg.presentation.presenter.CadObraPresenter;
 import br.com.treg.presentation.presenter.CadOrcamentoPresenter;
+import br.com.treg.presentation.presenter.CadReciboPresenter;
+import br.com.treg.presentation.view.MainView;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -19,6 +25,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -41,7 +48,9 @@ import org.controlsfx.control.TaskProgressView;
  *
  * @author Gustavo
  */
-public class MainViewImpl extends BorderPane {
+public class MainViewImpl extends BorderPane implements MainView{
+    
+    List<MainViewListener> listeners = new ArrayList<MainViewListener>();
     
     //Presenters
     private CadFornecedorPresenter cadFornecedorPresenter;
@@ -51,15 +60,18 @@ public class MainViewImpl extends BorderPane {
     private CadObraPresenter cadObraPresenter;
     private CadNotaFiscalPresenter cadNotaFiscalPresenter;
     private CadBoletoPresenter cadBoletoPresenter;
+    private CadReciboPresenter cadReciboPresenter;
     
     private ColorPicker colorPicker;
     
+    private VBox boletosPendentesLayout, boletosPagosLayout;
     private HBox menuLayout;
     private MenuBar menu;
     private Menu menuFile, menuEdit, menuView;
     private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-            itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto;
-    private Text pick;
+            itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto,
+            itemCadRecibo;
+    private Text pick, textoPagos, textoPendentes;
     
     public MainViewImpl(){
         
@@ -71,8 +83,6 @@ public class MainViewImpl extends BorderPane {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         menu.setMinWidth(primaryScreenBounds.getWidth());
         
-        
-        
         menuFile = new Menu("Cadastro");
         itemCadFornecedor = new MenuItem("Fornecedor");
         itemCadCliente = new MenuItem("Cliente");
@@ -81,8 +91,9 @@ public class MainViewImpl extends BorderPane {
         itemCadObra = new MenuItem("Obra");
         itemCadNotaFiscal = new MenuItem("Nota Fiscal");
         itemCadBoleto = new MenuItem("Boleto");
+        itemCadRecibo = new MenuItem("Recibo");
         menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-                itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto);
+                itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto, itemCadRecibo);
         
         
         menuEdit = new Menu("Edit");
@@ -147,8 +158,28 @@ public class MainViewImpl extends BorderPane {
                 setCenter((Parent) cadBoletoPresenter.getView());
             }
         });
+        
+        itemCadRecibo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cadReciboPresenter = new CadReciboPresenter();
+                setCenter((Parent) cadReciboPresenter.getView());
+            }
+        });
    
         VBox leftLayout = new VBox();
+        
+        boletosPagosLayout = new VBox();
+        boletosPagosLayout.setSpacing(7);
+        textoPagos = new Text("Últimos 5 boletos pagos");
+        
+        
+        
+        boletosPendentesLayout = new VBox();
+        boletosPendentesLayout.setSpacing(7);
+        textoPendentes = new Text("Próximos 5 boletos a vencer");
+        
+        
         colorPicker = new ColorPicker();
         colorPicker.setValue(Color.CORAL);
         
@@ -170,9 +201,43 @@ public class MainViewImpl extends BorderPane {
             }
         });
         
+//        leftLayout.getChildren().add(boletosPendentesLayout);
+        
         this.setLeft(leftLayout);
         this.setTop(menuLayout);
         
+    }
+
+    @Override
+    public void costroiBoletosPagosLayout(Collection<Boleto> lista) {
+        boletosPagosLayout.getChildren().clear();
+        boletosPagosLayout.getChildren().add(textoPagos);
+        if(lista.size() == 0){
+            Text listaVaziaText = new Text("Não há Boletos pagos disponíveis!");
+        }else{
+            
+        }
+    }
+
+    @Override
+    public void constroiBoletosPendentesLayout(Collection<Boleto> lista) {
+        boletosPendentesLayout.getChildren().clear();
+        boletosPendentesLayout.getChildren().add(textoPendentes);
+        if(lista.size() == 0){
+            Text listaVaziaText = new Text("Não há Boleto a ser pago");
+            boletosPendentesLayout.getChildren().add(listaVaziaText);
+        }else{
+            for(Boleto b : lista){
+                Button botao = new Button(b.toString());
+                botao.setUserData(b);
+                boletosPendentesLayout.getChildren().add(botao);
+            }
+        }
+    }
+
+    @Override
+    public void addListener(MainViewListener listener) {
+        listeners.add(listener);
     }
 
     

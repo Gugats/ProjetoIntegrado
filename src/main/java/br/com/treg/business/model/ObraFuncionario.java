@@ -98,7 +98,7 @@ public class ObraFuncionario implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treg.business.model.ObraFuncionario[ id=" + id + " ]";
+        return getFuncionario().getNome();
     }
     
 }

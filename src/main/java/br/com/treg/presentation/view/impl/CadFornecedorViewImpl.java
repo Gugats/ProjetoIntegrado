@@ -5,6 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
+import br.com.treg.business.model.Cliente;
 import br.com.treg.business.model.Fornecedor;
 import br.com.treg.presentation.view.CadFornecedorView;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -40,8 +40,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
     
     //Elementos do form
     private VBox formLayout, tabelaLayout;
-    private Label lNome, lCnpj, lEndereco;
-    private TextField tfNome, tfCnpj, tfEndereco;
+    private Label lNome, lCnpj, lEndereco, lTelefone, lEmail;
+    private TextField tfNome, tfCnpj, tfEndereco, tfTelefone, tfEmail;
     private Text titulo;
     private Button salvar, cancelar, excluir;
     private Fornecedor fornecedor = new Fornecedor();
@@ -61,6 +61,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         formLayout.setSpacing(10);
         
         titulo = new Text("Cadastro de Fornecedores");
+        titulo.setId("titulo");
+        
         HBox nomeLayout = new HBox();
         nomeLayout.setSpacing(7);
         lNome = new Label("Razão Social: ");
@@ -82,6 +84,20 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
         enderecoLayout.setAlignment(Pos.TOP_CENTER);
         
+        HBox telefoneLayout = new HBox();
+        telefoneLayout.setSpacing(7);
+        lTelefone = new Label("Telefone: ");
+        tfTelefone = new TextField();
+        telefoneLayout.getChildren().addAll(lTelefone, tfTelefone);
+        telefoneLayout.setAlignment(Pos.TOP_CENTER);
+        
+        HBox emailLayout = new HBox();
+        emailLayout.setSpacing(7);
+        lEmail = new Label("E-mail: ");
+        tfEmail = new TextField();
+        emailLayout.getChildren().addAll(lEmail, tfEmail);
+        emailLayout.setAlignment(Pos.TOP_CENTER);
+        
         HBox botoesLayout = new HBox();
         botoesLayout.setSpacing(7);
         salvar = new Button("Salvar");
@@ -91,24 +107,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
         
-        BooleanBinding bb = new BooleanBinding() {
-            {
-                super.bind(tfCnpj.textProperty(),
-                        tfNome.textProperty(),
-                        tfEndereco.textProperty());
-            }
-
-            @Override
-            protected boolean computeValue() {
-                return (tfCnpj.getText().isEmpty()
-                        || tfNome.getText().isEmpty()
-                        || tfEndereco.getText().isEmpty());
-            }
-        };
-        salvar.disableProperty().bind(bb);
-        
         tabela = new TableView();
-        tabela.setMaxWidth(400);
+        tabela.setMaxWidth(600);
         
         TableColumn nome = new TableColumn("Razão Social");
         nome.setMinWidth(100);
@@ -128,7 +128,19 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 new PropertyValueFactory<Fornecedor, StringProperty>("endereco")
         );
         
-        tabela.getColumns().addAll(nome, cnpj, endereco);
+        TableColumn fone = new TableColumn("Telefone");
+        fone.setMinWidth(100);
+        fone.setCellValueFactory(
+                new PropertyValueFactory<Fornecedor, StringProperty>("telefone")
+        );
+        
+        TableColumn email = new TableColumn("Email");
+        email.setMinWidth(100);
+        email.setCellValueFactory(
+                new PropertyValueFactory<Fornecedor, StringProperty>("email")
+        );
+        
+        tabela.getColumns().addAll(nome, cnpj, endereco, fone, email);
         
         tabelaLayout = new VBox();
         tabelaLayout.setSpacing(10);
@@ -159,6 +171,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 tfNome.setText(fornecedor.getNome());
                 tfCnpj.setText(fornecedor.getCnpj());
                 tfEndereco.setText(fornecedor.getEndereco());
+                tfTelefone.setText(fornecedor.getTelefone());
+                tfEmail.setText(fornecedor.getEmail());
                 excluir.setDisable(false);
             }
         });
@@ -170,6 +184,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 fornecedor.setNome(tfNome.getText());
                 fornecedor.setCnpj(tfCnpj.getText());
                 fornecedor.setEndereco(tfEndereco.getText());
+                fornecedor.setEmail(tfEmail.getText());
+                fornecedor.setTelefone(tfTelefone.getText());
                 
                 for(CadFornecedorViewListener l : listeners) {
                     l.salvar(fornecedor);
@@ -187,6 +203,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 tfNome.setText("");
                 tfCnpj.setText("");
                 tfEndereco.setText("");
+                tfTelefone.setText("");
+                tfEmail.setText("");
                 excluir.setDisable(true);
                 fornecedor = new Fornecedor();
             }
@@ -201,6 +219,8 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
                 
                 tfNome.setText("");
                 tfCnpj.setText("");
+                tfTelefone.setText("");
+                tfEmail.setText("");
                 tfEndereco.setText("");
                 fornecedor = new Fornecedor();
                 excluir.setDisable(true);
@@ -208,7 +228,7 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
             }
         });
         
-        formLayout.getChildren().addAll(titulo, nomeLayout, cnpjLayout, enderecoLayout, botoesLayout, tabelaLayout);
+        formLayout.getChildren().addAll(titulo, nomeLayout, cnpjLayout, enderecoLayout,emailLayout, telefoneLayout, botoesLayout, tabelaLayout);
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
         
