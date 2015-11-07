@@ -5,6 +5,7 @@
  */
 package br.com.treg.presentation.view.impl;
 
+import br.com.treg.TReG;
 import br.com.treg.business.model.Boleto;
 import br.com.treg.business.model.NotaFiscal;
 import br.com.treg.presentation.view.CadBoletoView;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,11 +32,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.Notifications;
@@ -53,10 +56,14 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
     private ObservableList<NotaFiscal> listaNF;
     private ObservableList<Integer> listaParcelas;
     private ObservableList<Boleto> listaBoleto;
+    private ObservableList<Boleto> listaBoletosPendentes;
+    private ObservableList<Boleto> listaBoletosPagos;
     private DatePicker dataEmissao;
     private DatePicker dataVencimento, dataPagamento;
     private CheckBox pago;
     private TableView<Boleto> tabela;
+    private HBox dataPagamentoLayout;
+    private TextField tfValor;
     private Button salvar, cancelar, excluir;
     private Boleto boleto = new Boleto();
 
@@ -98,11 +105,19 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         dataVencimentoLayout.setAlignment(Pos.TOP_CENTER);
         formLayout.getChildren().add(dataVencimentoLayout);
         
+        HBox valorLayout = new HBox();
+        valorLayout.setSpacing(7);
+        Label lValor = new Label("Valor: ");
+        tfValor = new TextField();
+        valorLayout.getChildren().addAll(lValor, tfValor);
+        valorLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.getChildren().add(valorLayout);
+        
         pago = new CheckBox("Pago?");
         pago.setSelected(false);
         formLayout.getChildren().add(pago);
         
-        final HBox dataPagamentoLayout = new HBox();
+        dataPagamentoLayout = new HBox();
         dataPagamentoLayout.setVisible(false);
         dataPagamentoLayout.setSpacing(7);
         Label lDataPagamento = new Label("Data de Pagamento: ");
@@ -111,14 +126,14 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         dataPagamentoLayout.setAlignment(Pos.TOP_CENTER);
         formLayout.getChildren().add(dataPagamentoLayout);
         
-        pago.setOnMousePressed(new EventHandler<MouseEvent>() {
+        pago.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
             @Override
-            public void handle(MouseEvent event) {
-                if(pago.isSelected()){
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue == true)
                     dataPagamentoLayout.setVisible(true);
-                }else{
+                else
                     dataPagamentoLayout.setVisible(false);
-                }
             }
         });
         
@@ -178,8 +193,29 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         TableColumn pagoCol = new TableColumn("Pago");
         pagoCol.setMinWidth(40);
         pagoCol.setCellValueFactory(
-                new PropertyValueFactory<Boleto, StringProperty>("pago")
+                new PropertyValueFactory<Boleto, BooleanProperty>("pago")
         );
+        
+        pagoCol.setCellFactory(column -> {
+            return new TableCell<Boleto, Boolean>() {
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    }else{
+                        if(item.booleanValue() == true){
+                            setText("Sim");
+                        }else{
+                            setText("Não");
+                        }
+                    }
+                }
+            };
+        
+        });
         
         tabela.getColumns().addAll(nota, dataEmi, dataVen, parcela, pagoCol);
         
@@ -200,6 +236,7 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
                 Date input2 = boleto.getDataVencimento();
                 dataVencimento.setValue(Instant.ofEpochMilli(input2.getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
                 pago.setSelected(boleto.getPago());
+                tfValor.setText(boleto.getValor().toString());
                 excluir.setDisable(false);
             }
         });
@@ -212,13 +249,20 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
                 boleto.setNotaFiscal(comboNF.getValue());
                 boleto.setPago(pago.isSelected());
                 boleto.setParcela(comboParcelas.getValue());
+                boleto.setValor(Double.parseDouble(tfValor.getText()));
                 
                 for(CadBoletoViewListener l : listeners){
                     l.salvar(boleto);
                 }
                 limparForm();
-//                BorderPane parent = (BorderPane) getParent();
                 
+                for(CadBoletoViewListener l : listeners){
+                    listaBoletosPendentes = FXCollections.observableArrayList(l.atualizaListaBoletosPendentes());
+                    listaBoletosPagos = FXCollections.observableArrayList(l.atualizaListaBoletosPagos());
+                }
+                
+                TReG.viewPresenter.view.constroiBoletosPendentesLayout(listaBoletosPendentes);
+                TReG.viewPresenter.view.costroiBoletosPagosLayout(listaBoletosPagos);
             }
         });
         
@@ -248,6 +292,15 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
                         l.excluir(boleto);
                 
                     limparForm();
+                    
+                    for(CadBoletoViewListener l : listeners){
+                        listaBoletosPendentes = FXCollections.observableArrayList(l.atualizaListaBoletosPendentes());
+                        listaBoletosPagos = FXCollections.observableArrayList(l.atualizaListaBoletosPagos());
+                    }
+
+                    TReG.viewPresenter.view.constroiBoletosPendentesLayout(listaBoletosPendentes);
+                    TReG.viewPresenter.view.costroiBoletosPagosLayout(listaBoletosPagos);
+                    
                 }
             }
         });
@@ -279,6 +332,7 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
         dataEmissao.setValue(null);
         dataPagamento.setValue(null);
         dataVencimento.setValue(null);
+        tfValor.setText("");
         
     }
 
@@ -296,6 +350,11 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
             lista.add(i);
             i++;
         }
+        
+        int numParcelas = lista.size();
+        Double valor = comboNF.getValue().getValor()/numParcelas;
+        tfValor.setText(valor.toString());
+        
         listaParcelas = FXCollections.observableArrayList(lista);
         comboParcelas.setItems(listaParcelas);
     }

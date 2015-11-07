@@ -23,7 +23,7 @@ import javax.persistence.TransactionRequiredException;
 public abstract class GenericDAOImpl<T> implements GenericDAO<T> {
 
     private Class<T> persistentClass;
-    private EntityManager em;
+    EntityManager em;
 
     /**
      * Método responsável pela instanciação e extração da classe persistente.

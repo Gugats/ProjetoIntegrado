@@ -15,7 +15,7 @@ import br.com.treg.presentation.view.impl.MainViewImpl;
  */
 public class MainViewPresenter implements MainView.MainViewListener{
 
-    MainView view;
+    public MainView view;
     
     BoletoBO boletoBO;
     
@@ -24,7 +24,8 @@ public class MainViewPresenter implements MainView.MainViewListener{
         this.view.addListener(this);
         
         boletoBO = new BoletoBO();
-        this.view.constroiBoletosPendentesLayout(boletoBO.listAll());
+        this.view.constroiBoletosPendentesLayout(boletoBO.listaPendentes());
+        this.view.costroiBoletosPagosLayout(boletoBO.listaPagos());
     }
 
     @Override

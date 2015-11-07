@@ -8,8 +8,10 @@ package br.com.treg.business.model;
 import java.io.Serializable;
 import java.util.Date;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -49,11 +51,13 @@ public class Boleto implements Serializable {
     private Date dataPagamento;
     private BooleanProperty pago;
     private IntegerProperty parcela;
+    private DoubleProperty valor;
 
     public Boleto() {
         id = new SimpleIntegerProperty();
         pago = new SimpleBooleanProperty();
         parcela = new SimpleIntegerProperty();
+        valor = new SimpleDoubleProperty();
     }
 
     @Id
@@ -107,6 +111,17 @@ public class Boleto implements Serializable {
         return this.parcela;
     }
     
+    @Column(name = "valor")
+    public final Double getValor(){
+        return valorProperty().get();
+    }
+    public void setValor(Double valor){
+        valorProperty().set(valor);
+    }
+    public DoubleProperty valorProperty(){
+        return this.valor;
+    }
+    
     @Column(name = "pago")
     public final Boolean getPago(){
         return pagoProperty().get();
@@ -149,7 +164,7 @@ public class Boleto implements Serializable {
 
     @Override
     public String toString() {
-        return getNotaFiscal() + " - Data Vencimento: " + getDataVencimento();
+        return "Valor: R$ "+getValor() + " - Data Vencimento: " + getDataVencimento();
     }
     
 }

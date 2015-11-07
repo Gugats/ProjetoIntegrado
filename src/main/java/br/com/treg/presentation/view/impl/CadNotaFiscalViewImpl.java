@@ -158,7 +158,7 @@ public class CadNotaFiscalViewImpl extends VBox implements CadNotaFiscalView{
         this.getChildren().add(formLayout);
         
         tabela = new TableView<>();
-        tabela.setMaxWidth(250);
+        tabela.setMaxWidth(500);
         
         TableColumn fornecedor = new TableColumn("Fornecedor");
         fornecedor.setMinWidth(100);

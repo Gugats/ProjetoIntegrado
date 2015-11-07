@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 
 public class TReG extends Application {
     
+    public static MainViewPresenter viewPresenter;
+    
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -24,7 +26,7 @@ public class TReG extends Application {
         stage.setWidth(primaryScreenBounds.getWidth());
         stage.setHeight(primaryScreenBounds.getHeight());
         
-        MainViewPresenter viewPresenter = new MainViewPresenter();
+        viewPresenter = new MainViewPresenter();
         
         Scene scene = new Scene((Parent)viewPresenter.getView(), 500, 200);
         scene.getStylesheets().add("/styles/Styles.css");

@@ -141,7 +141,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         );
         
         TableColumn endereco = new TableColumn("Endereço");
-        endereco.setMinWidth(100);
+        endereco.setMinWidth(200);
         endereco.setCellValueFactory(
                 new PropertyValueFactory<Funcionario, StringProperty>("endereco")
         );

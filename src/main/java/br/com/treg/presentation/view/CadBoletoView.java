@@ -19,6 +19,8 @@ public interface CadBoletoView {
         CadBoletoView getView();
         void salvar(Boleto boleto);
         void excluir(Boleto boleto);
+        Collection<Boleto> atualizaListaBoletosPendentes();
+        Collection<Boleto> atualizaListaBoletosPagos();
     }
     
     void addListener(CadBoletoViewListener listener);
@@ -34,5 +36,7 @@ public interface CadBoletoView {
     void populaComboParcelas(Integer n);
     
     void populaListaBoletos(Collection<Boleto> lista);
+    
+    
     
 }

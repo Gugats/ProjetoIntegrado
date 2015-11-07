@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -165,13 +166,27 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
         ativo.setMinWidth(50);
         ativo.setCellValueFactory(new PropertyValueFactory<Funcionario, BooleanProperty>("ativo"));
         
-//         lastNameCol.setCellValueFactory(new Callback<CellDataFeatures<Person, String>, ObservableValue<String>>() {
-//     public ObservableValue<String> call(CellDataFeatures<Person, String> p) {
-//         // p.getValue() returns the Person instance for a particular TableView row
-//         return p.getValue().lastNameProperty();
-//     }
-//  });
-// }
+        ativo.setCellFactory(column -> {
+            return new TableCell<Funcionario, Boolean>() {
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    }else{
+                        if(item.booleanValue() == true){
+                            setText("Sim");
+                        }else{
+                            setText("Não");
+                        }
+                    }
+                }
+            };
+        
+        });
+        
         
         tabela.getColumns().addAll(nome, fone, funcao, diaria, ativo);
         

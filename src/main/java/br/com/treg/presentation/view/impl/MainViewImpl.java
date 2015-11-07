@@ -32,6 +32,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -168,16 +169,18 @@ public class MainViewImpl extends BorderPane implements MainView{
         });
    
         VBox leftLayout = new VBox();
+        leftLayout.setSpacing(10);
         
         boletosPagosLayout = new VBox();
+        boletosPagosLayout.setId("borderLayout");
         boletosPagosLayout.setSpacing(7);
-        textoPagos = new Text("Últimos 5 boletos pagos");
-        
+        textoPagos = new Text("Últimos boletos pagos");
         
         
         boletosPendentesLayout = new VBox();
+        boletosPendentesLayout.setId("borderLayout");
         boletosPendentesLayout.setSpacing(7);
-        textoPendentes = new Text("Próximos 5 boletos a vencer");
+        textoPendentes = new Text("Próximos boletos a vencer");
         
         
         colorPicker = new ColorPicker();
@@ -201,7 +204,8 @@ public class MainViewImpl extends BorderPane implements MainView{
             }
         });
         
-//        leftLayout.getChildren().add(boletosPendentesLayout);
+        leftLayout.getChildren().add(boletosPendentesLayout);
+        leftLayout.getChildren().add(boletosPagosLayout);
         
         this.setLeft(leftLayout);
         this.setTop(menuLayout);
@@ -214,8 +218,15 @@ public class MainViewImpl extends BorderPane implements MainView{
         boletosPagosLayout.getChildren().add(textoPagos);
         if(lista.size() == 0){
             Text listaVaziaText = new Text("Não há Boletos pagos disponíveis!");
+            boletosPagosLayout.getChildren().add(listaVaziaText);
         }else{
-            
+            for(Boleto b : lista){
+                Button botao = new Button(b.toString());
+                botao.setUserData(b);
+                Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
+                botao.setTooltip(tooltip);
+                boletosPagosLayout.getChildren().add(botao);
+            }
         }
     }
 
@@ -230,6 +241,8 @@ public class MainViewImpl extends BorderPane implements MainView{
             for(Boleto b : lista){
                 Button botao = new Button(b.toString());
                 botao.setUserData(b);
+                Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
+                botao.setTooltip(tooltip);
                 boletosPendentesLayout.getChildren().add(botao);
             }
         }

@@ -6,11 +6,16 @@
 package br.com.treg.integration.dao;
 
 import br.com.treg.business.model.Boleto;
+import java.util.Collection;
 
 /**
  *
  * @author Gustavo
  */
 public interface BoletoDAO extends GenericDAO<Boleto>{
+
+    public Collection<Boleto> listaPendentes();
+
+    public Collection<Boleto> listaPagos();
     
 }

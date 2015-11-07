@@ -9,6 +9,7 @@ import br.com.treg.business.model.Obra;
 import br.com.treg.business.model.ObraFuncionario;
 import br.com.treg.presentation.view.CadReciboView;
 import br.com.treg.utils.GeneratorPDF;
+import br.com.treg.utils.ValorPorExtenso;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.controlsfx.control.Notifications;
 
 /**
  *
@@ -106,12 +108,15 @@ public class CadReciboViewImpl extends VBox implements CadReciboView{
                 String dias = tfDias.getText();
                 int d = Integer.parseInt(dias);
                 double valor = of.getFuncionario().getDiaria() * d;
+                String valorExtenso = ValorPorExtenso.calcular(valor);
                 
-                String texto = "";
-                new GeneratorPDF(texto);
+                new GeneratorPDF(valorExtenso, of, valor);
+                
+                sucesso("Recibo gerado com sucesso!");
             }
         });
         
+        formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
         
     }
@@ -128,7 +133,7 @@ public class CadReciboViewImpl extends VBox implements CadReciboView{
 
     @Override
     public void sucesso(String msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Notifications.create().title("Sucesso").position(Pos.CENTER).text(msg).showInformation();
     }
 
     @Override

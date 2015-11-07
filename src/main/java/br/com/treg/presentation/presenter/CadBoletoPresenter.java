@@ -10,6 +10,7 @@ import br.com.treg.business.bo.NotaFiscalBO;
 import br.com.treg.business.model.Boleto;
 import br.com.treg.presentation.view.CadBoletoView;
 import br.com.treg.presentation.view.impl.CadBoletoViewImpl;
+import java.util.Collection;
 
 /**
  *
@@ -59,6 +60,16 @@ public class CadBoletoPresenter implements CadBoletoView.CadBoletoViewListener{
         }catch(RuntimeException re){
             this.view.falha("Ocorreu um erro ao realizar exclusão! Contate o administrador!");
         }
+    }
+
+    @Override
+    public Collection<Boleto> atualizaListaBoletosPendentes() {
+        return bo.listaPendentes();
+    }
+
+    @Override
+    public Collection<Boleto> atualizaListaBoletosPagos() {
+        return bo.listaPagos();
     }
     
 }
