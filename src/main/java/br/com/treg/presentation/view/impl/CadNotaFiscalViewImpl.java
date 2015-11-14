@@ -40,8 +40,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.controlsfx.control.Notifications;
 
 /**
@@ -52,7 +54,8 @@ public class CadNotaFiscalViewImpl extends VBox implements CadNotaFiscalView{
 
     List<CadNotaFiscalViewListener> listeners = new ArrayList<CadNotaFiscalViewListener>();
     
-    private VBox formLayout, tabelaLayout;
+    private GridPane formLayout;
+    private VBox tabelaLayout;
     private ComboBox<String> comboTipoNota, comboFormaPag;
     private DatePicker dataEmissao;
     private TextArea discriminacao;
@@ -65,81 +68,71 @@ public class CadNotaFiscalViewImpl extends VBox implements CadNotaFiscalView{
     private Button cancelar, excluir, salvar;
     private TableView<NotaFiscal> tabela;
     private NotaFiscal nf = new NotaFiscal();
-    private HBox parcelasLayout;
+    private Label lParcelas;
     
     public CadNotaFiscalViewImpl() {
         this.setSpacing(10);
         
-        formLayout = new VBox();
-        formLayout.setSpacing(10);
+        HBox tituloLayout = new HBox();
+        Text titulo = new Text("Cadastro de Nota Fiscal");
+        titulo.setId("titulo");
+        tituloLayout.getChildren().add(titulo);
+        tituloLayout.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(tituloLayout);
         
-        HBox fornecedorLayout = new HBox();
-        fornecedorLayout.setSpacing(7);
+        formLayout = new GridPane();
+        formLayout.setVgap(7);
+        formLayout.setHgap(5);        
+                
         Label lFornecedor = new Label("Fornecedor/Prestador de Serviços: ");
         comboFornecedor = new ComboBox<>();
-        fornecedorLayout.getChildren().addAll(lFornecedor, comboFornecedor);
-        fornecedorLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(fornecedorLayout);
+        formLayout.add(lFornecedor, 0, 1);
+        formLayout.add(comboFornecedor, 1, 1);
         
-        HBox obraLayout = new HBox();
-        obraLayout.setSpacing(7);
         Label lObra = new Label("Obra: ");
         comboObra = new ComboBox<>();
-        obraLayout.getChildren().addAll(lObra, comboObra);
-        obraLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(obraLayout);
+        formLayout.add(lObra, 0, 2);
+        formLayout.add(comboObra, 1, 2);
         
-        HBox dataLayout = new HBox();
-        dataLayout.setSpacing(7);
         Label lData = new Label("Data de Emissão: ");
         dataEmissao = new DatePicker();
-        dataLayout.getChildren().addAll(lData, dataEmissao);
-        dataLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(dataLayout);
+        formLayout.add(lData, 0, 3);
+        formLayout.add(dataEmissao, 1, 3);
         
-        VBox descLayout = new VBox();
-        descLayout.setSpacing(7);
         Label lDesc = new Label("Discriminação de Serviços/Produtos: ");
         discriminacao = new TextArea();
         discriminacao.setMaxWidth(250);
-        descLayout.getChildren().addAll(lDesc, discriminacao);
-        descLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(descLayout);
+        formLayout.add(lDesc, 0, 4);
+        formLayout.add(discriminacao, 1, 4);
         
-        HBox valorLayout = new HBox();
-        valorLayout.setSpacing(7);
         Label lValor = new Label("Valor Total: ");
         tfValor = new TextField();
-        valorLayout.getChildren().addAll(lValor, tfValor);
-        valorLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(valorLayout);
+        formLayout.add(lValor, 0, 5);
+        formLayout.add(tfValor, 1, 5);
         
-        HBox formaPagLayout = new HBox();
-        formaPagLayout.setSpacing(7);
         Label lFormPag = new Label("Forma de Pagamento: ");
         comboFormaPag = new ComboBox<>();
         comboFormaPag.getItems().add("A Vista");
         comboFormaPag.getItems().add("A Prazo");
-        formaPagLayout.getChildren().addAll(lFormPag, comboFormaPag);
-        formaPagLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(formaPagLayout);
+        formLayout.add(lFormPag, 0, 6);
+        formLayout.add(comboFormaPag, 1, 6);
         
-        parcelasLayout = new HBox();
-        parcelasLayout.setSpacing(7);
-        parcelasLayout.setVisible(false);
-        Label lParcelas = new Label("Nº de parcelas: ");
+        lParcelas = new Label("Nº de parcelas: ");
         tfQtdParcelas = new TextField();
-        parcelasLayout.getChildren().addAll(lParcelas, tfQtdParcelas);
-        parcelasLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(parcelasLayout);
+        formLayout.add(lParcelas, 0, 7);
+        formLayout.add(tfQtdParcelas, 1, 7);
+        lParcelas.setVisible(false);
+        tfQtdParcelas.setVisible(false);
         
         comboFormaPag.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 if(comboFormaPag.getValue().equals("A Prazo")){
-                    parcelasLayout.setVisible(true);
+                    lParcelas.setVisible(true);
+                    tfQtdParcelas.setVisible(true);
                 }else{
-                    parcelasLayout.setVisible(false);
+                    lParcelas.setVisible(false);
+                    tfQtdParcelas.setVisible(false);
                 }
             }
         });
@@ -152,7 +145,7 @@ public class CadNotaFiscalViewImpl extends VBox implements CadNotaFiscalView{
         excluir.setDisable(true);
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(botoesLayout);
+        formLayout.add(botoesLayout, 0, 8);
         
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
@@ -280,7 +273,8 @@ public class CadNotaFiscalViewImpl extends VBox implements CadNotaFiscalView{
         tfQtdParcelas.setText("");
         comboFornecedor.setValue(null);
         comboObra.setValue(null);
-        parcelasLayout.setVisible(false);
+        lParcelas.setVisible(false);
+        tfQtdParcelas.setVisible(false);
         excluir.setDisable(true);
         tabela.getSelectionModel().select(null);
         nf = new NotaFiscal();

@@ -84,10 +84,10 @@ public class CadReciboViewImpl extends VBox implements CadReciboView{
         
         HBox botoesLayout = new HBox();
         botoesLayout.setSpacing(7);
-        salvarGerar = new Button("Gerar PDF");
+        salvarGerar = new Button("Gerar Recibo - PDF");
         cancelar = new Button("Cancelar");
         excluir = new Button("Excluir");
-        botoesLayout.getChildren().addAll(salvarGerar, cancelar, excluir);
+        botoesLayout.getChildren().addAll(salvarGerar, cancelar);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
         formLayout.getChildren().add(botoesLayout);
         

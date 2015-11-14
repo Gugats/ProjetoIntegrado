@@ -5,6 +5,36 @@
     -fx-padding: 10;
 }
 
+#titulo{
+    -fx-fill: #2e8b57;
+    -fx-font: 25px Tahoma;
+}
+
+.label {
+    -fx-fill: #2e8b57;
+}
+
+.button {
+    -fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#F0F0F0 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+
+.button:hover {
+    -fx-background-color: #99CC99,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+}
+
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base,30%));
+}
+
 /*.root {
 -fx-base: rgb(50, 50, 50);
 -fx-background: rgb(120,120,120);
@@ -59,10 +89,7 @@
 -fx-text-fill: orange;
 }
 
-#titulo{
-    -fx-fill: orange;
-    -fx-font: 50px Tahoma;
-}
+
 
 .text-input:focused {
     -fx-background-color: grey;

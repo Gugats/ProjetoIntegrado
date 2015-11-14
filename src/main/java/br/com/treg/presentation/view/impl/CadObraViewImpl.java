@@ -132,7 +132,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         this.getChildren().add(formLayout);
         
         tabela = new TableView<>();
-        tabela.setMaxWidth(350);
+        tabela.setMaxWidth(400);
         
         TableColumn cliente = new TableColumn("Cliente");
         cliente.setMinWidth(100);
@@ -147,7 +147,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         );
         
         TableColumn status = new TableColumn("Status");
-        status.setMinWidth(50);
+        status.setMinWidth(100);
         status.setCellValueFactory(
                 new PropertyValueFactory<Funcionario, BooleanProperty>("status")
         );

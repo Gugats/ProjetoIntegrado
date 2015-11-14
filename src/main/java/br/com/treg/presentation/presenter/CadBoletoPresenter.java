@@ -11,6 +11,7 @@ import br.com.treg.business.model.Boleto;
 import br.com.treg.presentation.view.CadBoletoView;
 import br.com.treg.presentation.view.impl.CadBoletoViewImpl;
 import java.util.Collection;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -25,6 +26,7 @@ public class CadBoletoPresenter implements CadBoletoView.CadBoletoViewListener{
     private NotaFiscalBO notaFiscalBO;
 
     public CadBoletoPresenter() {
+        
         view = new CadBoletoViewImpl();
         this.view.addListener(this);
         
@@ -33,6 +35,19 @@ public class CadBoletoPresenter implements CadBoletoView.CadBoletoViewListener{
         
         this.view.populaListaBoletos(bo.listAll());
         this.view.populaComboNF(notaFiscalBO.listAll());
+    }
+    
+    public CadBoletoPresenter(Boleto boleto){
+        view = new CadBoletoViewImpl();
+        this.view.addListener(this);
+        
+        bo = new BoletoBO();
+        notaFiscalBO = new NotaFiscalBO();
+        
+        this.view.populaListaBoletos(bo.listAll());
+        this.view.populaComboNF(notaFiscalBO.listAll());
+        
+        this.view.boletoOnClick(boleto);
     }
     
     @Override

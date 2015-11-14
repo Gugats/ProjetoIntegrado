@@ -37,6 +37,6 @@ public interface CadBoletoView {
     
     void populaListaBoletos(Collection<Boleto> lista);
     
-    
+    void boletoOnClick(Boleto b);
     
 }

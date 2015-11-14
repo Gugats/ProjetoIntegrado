@@ -15,9 +15,13 @@ import br.com.treg.presentation.presenter.CadObraPresenter;
 import br.com.treg.presentation.presenter.CadOrcamentoPresenter;
 import br.com.treg.presentation.presenter.CadReciboPresenter;
 import br.com.treg.presentation.view.MainView;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -44,6 +48,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import org.controlsfx.control.TaskProgressView;
+import org.controlsfx.dialog.ProgressDialog;
+import org.controlsfx.glyphfont.FontAwesome;
+import org.controlsfx.glyphfont.GlyphFont;
+import org.controlsfx.glyphfont.GlyphFontRegistry;
 
 /**
  *
@@ -63,16 +71,20 @@ public class MainViewImpl extends BorderPane implements MainView{
     private CadBoletoPresenter cadBoletoPresenter;
     private CadReciboPresenter cadReciboPresenter;
     
+    private GlyphFont font = GlyphFontRegistry.font("FontAwesome");
+    
     private ColorPicker colorPicker;
     
     private VBox boletosPendentesLayout, boletosPagosLayout;
     private HBox menuLayout;
     private MenuBar menu;
-    private Menu menuFile, menuEdit, menuView;
+    private Menu menuFile, menuConfig, menuView;
     private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento,
             itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto,
-            itemCadRecibo;
+            itemCadRecibo, itemConfigColor;
     private Text pick, textoPagos, textoPendentes;
+    
+    private ProgressDialog progressDialog;
     
     public MainViewImpl(){
         
@@ -97,10 +109,13 @@ public class MainViewImpl extends BorderPane implements MainView{
                 itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto, itemCadRecibo);
         
         
-        menuEdit = new Menu("Edit");
+        menuConfig = new Menu("Configuração");
+        itemConfigColor = new MenuItem("Cor de Background");
+        
+        
         menuView = new Menu("View");
         
-        menu.getMenus().addAll(menuFile, menuEdit, menuView);
+        menu.getMenus().addAll(menuFile, menuConfig, menuView);
         menuLayout.getChildren().add(menu);
         
         
@@ -221,11 +236,32 @@ public class MainViewImpl extends BorderPane implements MainView{
             boletosPagosLayout.getChildren().add(listaVaziaText);
         }else{
             for(Boleto b : lista){
-                Button botao = new Button(b.toString());
+                
+                String newstring = new SimpleDateFormat("dd-MM-yyyy").format(b.getDataPagamento());
+                
+                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Pagamento: " + newstring, font.create(FontAwesome.Glyph.MONEY));
                 botao.setUserData(b);
                 Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
                 botao.setTooltip(tooltip);
+//                botao.setId("glass-grey");
                 boletosPagosLayout.getChildren().add(botao);
+                botao.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                       
+                        cadBoletoPresenter = new CadBoletoPresenter((Boleto)botao.getUserData());
+//                        new Thread(cadBoletoPresenter).start();
+//                        progressDialog = new ProgressDialog(cadBoletoPresenter);
+                        setCenter((Parent) cadBoletoPresenter.getView());
+                        
+//                        progressDialog.setTitle("Executando...");
+//                        progressDialog.setHeaderText(null);
+//                        progressDialog.setContentText("Aguarde...");
+//                        
+//                        progressDialog.show();
+                        
+                    }
+                });
             }
         }
     }
@@ -239,11 +275,23 @@ public class MainViewImpl extends BorderPane implements MainView{
             boletosPendentesLayout.getChildren().add(listaVaziaText);
         }else{
             for(Boleto b : lista){
-                Button botao = new Button(b.toString());
+                String newstring = new SimpleDateFormat("dd-MM-yyyy").format(b.getDataVencimento());
+                
+                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Vencimento: " + newstring, font.create(FontAwesome.Glyph.MONEY));
                 botao.setUserData(b);
                 Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
                 botao.setTooltip(tooltip);
+//                botao.setId("glass-grey");
                 boletosPendentesLayout.getChildren().add(botao);
+                botao.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        
+                        cadBoletoPresenter = new CadBoletoPresenter((Boleto)botao.getUserData());
+                        
+                        setCenter((Parent) cadBoletoPresenter.getView());
+                    }
+                });
             }
         }
     }
