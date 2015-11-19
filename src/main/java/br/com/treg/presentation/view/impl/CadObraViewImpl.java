@@ -33,6 +33,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -47,7 +48,8 @@ public class CadObraViewImpl extends VBox implements CadObraView{
     
     List<CadObraViewListener> listeners = new ArrayList<CadObraViewListener>();
     
-    private VBox formLayout, tabelaLayout;
+    private GridPane formLayout;
+    private VBox tabelaLayout;
     private Text titulo;
     private ComboBox<Cliente> comboCliente;
     private ComboBox<String> comboStatus;
@@ -67,56 +69,51 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         
         this.setSpacing(10);
         
-        formLayout = new VBox();
-        formLayout.setSpacing(10);
-        
+        HBox tituloLayout = new HBox();
         titulo = new Text("Cadastro de Obra");
         titulo.setId("titulo");
-        formLayout.getChildren().add(titulo);
+        tituloLayout.getChildren().add(titulo);
+        tituloLayout.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(tituloLayout);
         
-        HBox clienteLayout = new HBox();
-        clienteLayout.setSpacing(7);
+        formLayout = new GridPane();
+        formLayout.setVgap(7);
+        formLayout.setHgap(5);
+        
         lCliente = new Label("Cliente: ");
         comboCliente = new ComboBox<>();
-        clienteLayout.getChildren().addAll(lCliente, comboCliente);
-        clienteLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(clienteLayout);
+        formLayout.add(lCliente, 0, 1);
+        formLayout.add(comboCliente, 1, 1);
         
-        HBox enderecoLayout = new HBox();
-        enderecoLayout.setSpacing(7);
         lEndereco = new Label("Local: ");
         tfEndereco = new TextField();
-        enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
-        enderecoLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(enderecoLayout);
+        formLayout.add(lEndereco, 0, 2);
+        formLayout.add(tfEndereco, 1, 2);
         
-        VBox descLayout = new VBox();
-        descLayout.setSpacing(7);
         Label lDesc = new Label("Descrição: ");
         descricao = new TextArea();
-        descricao.setMaxWidth(250);
-        descLayout.getChildren().addAll(lDesc, descricao);
-        descLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(descLayout);
+        descricao.setMinWidth(250);
+        descricao.setMinHeight(100);
+        formLayout.add(lDesc, 0, 3);
+        formLayout.add(descricao, 1, 3);
         
-        HBox statusLayout = new HBox();
-        statusLayout.setSpacing(7);
         lStatus = new Label("Status: ");
         comboStatus = new ComboBox<>();
         comboStatus.getItems().add("Não iniciada");
         comboStatus.getItems().add("Em andamento");
         comboStatus.getItems().add("Finalizada");
-        statusLayout.getChildren().addAll(lStatus, comboStatus);
-        statusLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(statusLayout);
+        formLayout.add(lStatus, 0, 4);
+        formLayout.add(comboStatus, 1, 4);
         
         checkAtivo = new CheckBox("Ativo");
         checkAtivo.setSelected(true);
-        formLayout.getChildren().add(checkAtivo);
+        formLayout.add(checkAtivo, 0, 5);
         
+        Label lFun = new Label("Funcionários: ");
         twinCol = new ListSelectionView<>();
-        twinCol.setMaxWidth(400);
-        formLayout.getChildren().add(twinCol);
+        twinCol.setMaxWidth(420);
+        formLayout.add(lFun, 0, 6);
+        formLayout.add(twinCol, 1, 6);
         
         HBox botoesLayout = new HBox();
         botoesLayout.setSpacing(7);
@@ -126,7 +123,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         excluir.setDisable(true);
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(botoesLayout);
+        formLayout.add(botoesLayout, 1, 7);
         
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
@@ -269,6 +266,7 @@ public class CadObraViewImpl extends VBox implements CadObraView{
         tabela.getSelectionModel().select(null);
         excluir.setDisable(true);
         descricao.setText("");
+        twinCol.getTargetItems().clear();
         for(CadObraViewListener l : listeners)
             l.getListaFuncionarios();
         obra = new Obra();

@@ -6,12 +6,14 @@
 }
 
 #titulo{
-    -fx-fill: #2e8b57;
+    -fx-fill: #1a4d1a;
     -fx-font: 25px Tahoma;
+    -fx-font-weight: bold;
 }
 
 .label {
-    -fx-fill: #2e8b57;
+    -fx-text-fill: #2e8b57;
+    -fx-font-weight: bold;
 }
 
 .button {
@@ -31,8 +33,50 @@
         radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
 }
 
-.menu-bar {
-    -fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base,30%));
+#labelTree {
+    -fx-text-fill: white;
+}
+
+.tree-view, .tree-cell {
+    -fx-background-color: #006666;
+    -fx-text-fill: white;
+}
+.tree-cell:expanded, .tree-cell:sub-tree-item {
+    -fx-background-color: #009966 ;
+}
+.tree-cell:selected {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+.tree-cell {
+    -fx-padding: 0.75em 0em 0.75em 0em;
+}
+.tree-cell:sub-tree-item {
+    -fx-padding: 0.25em;
+}
+
+.combo-box-base .box{
+    -fx-background-color: #CCFFCC;  
+}
+
+.text-field-base .box{
+    -fx-background-color: #CCFFCC;
+}
+
+.text-field-base {
+    -fx-font-weight: bold;
+}
+
+.check-box .box{
+    -fx-background-color: #CCFFCC;
+}
+ 
+.combo-box-base:hover  {
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+#mainPanel {
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
 }
 
 /*.root {

@@ -48,7 +48,7 @@ public class CadObraPresenter implements CadObraView.CadObraViewListener{
     public void salvar(Obra obra) {
 //        try{
             bo.saveOrUpdate(obra);
-//            this.view.sucesso("Obra salva com sucesso!");
+            this.view.sucesso("Obra salva com sucesso!");
 //        }catch(RuntimeException re){
 //            this.view.falha("Falha ao salvar Obra");
 //        }

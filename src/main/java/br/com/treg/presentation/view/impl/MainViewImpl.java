@@ -15,6 +15,7 @@ import br.com.treg.presentation.presenter.CadObraPresenter;
 import br.com.treg.presentation.presenter.CadOrcamentoPresenter;
 import br.com.treg.presentation.presenter.CadReciboPresenter;
 import br.com.treg.presentation.view.MainView;
+import br.com.treg.utils.CustomItem;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,12 +23,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -36,7 +41,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -71,139 +79,75 @@ public class MainViewImpl extends BorderPane implements MainView{
     private CadBoletoPresenter cadBoletoPresenter;
     private CadReciboPresenter cadReciboPresenter;
     
-    private GlyphFont font = GlyphFontRegistry.font("FontAwesome");
-    
+    //private GlyphFont font = GlyphFontRegistry.font("FontAwesome");
     private ColorPicker colorPicker;
     
+    private TreeView treeView;
+    
     private VBox boletosPendentesLayout, boletosPagosLayout;
-    private HBox menuLayout;
-    private MenuBar menu;
-    private Menu menuFile, menuConfig, menuView;
-    private MenuItem itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-            itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto,
-            itemCadRecibo, itemConfigColor;
     private Text pick, textoPagos, textoPendentes;
     
     private ProgressDialog progressDialog;
     
     public MainViewImpl(){
         
-        menuLayout = new HBox();
-        menuLayout.setSpacing(10);
+        this.setId("mainPanel");
         
-        menu = new MenuBar();
-        //menu.setStyle("-fx-background-color: #F0E68C;");
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        menu.setMinWidth(primaryScreenBounds.getWidth());
-        
-        menuFile = new Menu("Cadastro");
-        itemCadFornecedor = new MenuItem("Fornecedor");
-        itemCadCliente = new MenuItem("Cliente");
-        itemCadOrcamento = new MenuItem("Orçamento");
-        itemCadFuncionario = new MenuItem("Funcionario");
-        itemCadObra = new MenuItem("Obra");
-        itemCadNotaFiscal = new MenuItem("Nota Fiscal");
-        itemCadBoleto = new MenuItem("Boleto");
-        itemCadRecibo = new MenuItem("Recibo");
-        menuFile.getItems().addAll(itemCadFornecedor, itemCadCliente, itemCadOrcamento,
-                itemCadFuncionario, itemCadObra, itemCadNotaFiscal, itemCadBoleto, itemCadRecibo);
-        
-        
-        menuConfig = new Menu("Configuração");
-        itemConfigColor = new MenuItem("Cor de Background");
-        
-        
-        menuView = new Menu("View");
-        
-        menu.getMenus().addAll(menuFile, menuConfig, menuView);
-        menuLayout.getChildren().add(menu);
-        
-        
-        itemCadFornecedor.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                cadFornecedorPresenter = new CadFornecedorPresenter();
-                setCenter((Parent)cadFornecedorPresenter.getView());
-            }
-        });
-        
-        itemCadCliente.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                cadClientePresenter = new CadClientePresenter();
-                setCenter((Parent)cadClientePresenter.getView());
-            }
-        });
-        
-        itemCadOrcamento.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadOrcamentoPresenter = new CadOrcamentoPresenter();
-                setCenter((Parent)cadOrcamentoPresenter.getView());
-            }
-        });
-        
-        itemCadFuncionario.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadFuncionarioPresenter = new CadFuncionarioPresenter();
-                setCenter((Parent)cadFuncionarioPresenter.getView());
-            }
-        });
-        
-        itemCadObra.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadObraPresenter = new CadObraPresenter();
-                setCenter((Parent) cadObraPresenter.getView());
-            }
-        });
-        
-        itemCadNotaFiscal.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadNotaFiscalPresenter = new CadNotaFiscalPresenter();
-                setCenter((Parent) cadNotaFiscalPresenter.getView());
-            }
-        });
-        
-        itemCadBoleto.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadBoletoPresenter = new CadBoletoPresenter();
-                setCenter((Parent) cadBoletoPresenter.getView());
-            }
-        });
-        
-        itemCadRecibo.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cadReciboPresenter = new CadReciboPresenter();
-                setCenter((Parent) cadReciboPresenter.getView());
-            }
-        });
-   
         VBox leftLayout = new VBox();
         leftLayout.setSpacing(10);
+        
+        TreeItem<String> cadastrosItem = new TreeItem<>("Cadastros");
+        cadastrosItem.setExpanded(true);
+        
+        TreeItem<String> cadFornecedorItem = new TreeItem<>("Fornecedor");
+        TreeItem<String> cadClienteItem = new TreeItem<>("Cliente");
+        TreeItem<String> cadFuncionarioItem = new TreeItem<>("Funcionário");
+        TreeItem<String> cadObraItem = new TreeItem<>("Obra");
+        TreeItem<String> cadNFItem = new TreeItem<>("Nota Fiscal");
+        TreeItem<String> cadBoletoItem = new TreeItem<>("Boleto");
+        TreeItem<String> cadReciboItem = new TreeItem<>("Recibo");
+        TreeItem<String> cadOrcamentoItem = new TreeItem<>("Orçamento");
+        
+        cadastrosItem.getChildren().addAll(cadClienteItem, cadFornecedorItem, cadFuncionarioItem,
+                cadObraItem, cadNFItem, cadBoletoItem, cadReciboItem, cadOrcamentoItem);
+        
+        treeView = new TreeView(new TreeItem<Object>());
+        treeView.setShowRoot(false);
+        
+        colorPicker = new ColorPicker();
+        colorPicker.setValue(Color.CORAL);
+        Label label = new Label("Configurações");
+        
+        CustomItem customItem = new CustomItem(label);
+        CustomItem customItem2 = new CustomItem(new Label("Cor de Background: "), colorPicker);
+        
+        TreeItem<CustomItem> configItem = new TreeItem<>(customItem);
+        TreeItem<CustomItem> colorItem = new TreeItem<>(customItem2);
+        configItem.getChildren().add(colorItem);
+        
+        //TreeItem<ColorPicker> colorItem = new TreeItem<>(colorPicker, font.create(FontAwesome.Glyph.PAINT_BRUSH));
+        //colorItem.setGraphic(label);
+        
+        treeView.getRoot().getChildren().add(cadastrosItem);
+        treeView.getRoot().getChildren().add(configItem);
+        
+        treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> handle(newValue));
+        
+        leftLayout.getChildren().add(treeView);
         
         boletosPagosLayout = new VBox();
         boletosPagosLayout.setId("borderLayout");
         boletosPagosLayout.setSpacing(7);
         textoPagos = new Text("Últimos boletos pagos");
         
-        
         boletosPendentesLayout = new VBox();
         boletosPendentesLayout.setId("borderLayout");
         boletosPendentesLayout.setSpacing(7);
         textoPendentes = new Text("Próximos boletos a vencer");
         
+        //pick = new Text("Escolha a cor");
         
-        colorPicker = new ColorPicker();
-        colorPicker.setValue(Color.CORAL);
-        
-        pick = new Text("Escolha a cor");
-        
-        leftLayout.getChildren().addAll(pick, colorPicker);
+        //leftLayout.getChildren().addAll(pick, colorPicker);
         
         colorPicker.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -223,7 +167,6 @@ public class MainViewImpl extends BorderPane implements MainView{
         leftLayout.getChildren().add(boletosPagosLayout);
         
         this.setLeft(leftLayout);
-        this.setTop(menuLayout);
         
     }
 
@@ -239,7 +182,7 @@ public class MainViewImpl extends BorderPane implements MainView{
                 
                 String newstring = new SimpleDateFormat("dd-MM-yyyy").format(b.getDataPagamento());
                 
-                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Pagamento: " + newstring, font.create(FontAwesome.Glyph.MONEY));
+                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Pagamento: " + newstring);
                 botao.setUserData(b);
                 Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
                 botao.setTooltip(tooltip);
@@ -277,7 +220,7 @@ public class MainViewImpl extends BorderPane implements MainView{
             for(Boleto b : lista){
                 String newstring = new SimpleDateFormat("dd-MM-yyyy").format(b.getDataVencimento());
                 
-                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Vencimento: " + newstring, font.create(FontAwesome.Glyph.MONEY));
+                Button botao = new Button("Valor: R$ "+b.getValor() + " - Data Vencimento: " + newstring);
                 botao.setUserData(b);
                 Tooltip tooltip = new Tooltip("Clique para visualizar detalhes!");
                 botao.setTooltip(tooltip);
@@ -300,6 +243,48 @@ public class MainViewImpl extends BorderPane implements MainView{
     public void addListener(MainViewListener listener) {
         listeners.add(listener);
     }
-
+    
+    private void handle(Object newValue) {      
+        TreeItem<String> selectedItem = (TreeItem<String>) newValue;
+        
+        if(selectedItem.getValue().equals("Fornecedor")){
+            cadFornecedorPresenter = new CadFornecedorPresenter();
+            setCenter((Parent) cadFornecedorPresenter.getView());
+        }else if(selectedItem.getValue().equals("Cliente")){
+            cadClientePresenter = new CadClientePresenter();
+            setCenter((Parent) cadClientePresenter.getView());
+        }else if(selectedItem.getValue().equals("Obra")){
+            cadObraPresenter = new CadObraPresenter();
+            setCenter((Parent) cadObraPresenter.getView());
+        }else if(selectedItem.getValue().equals("Funcionário")){
+            cadFuncionarioPresenter = new CadFuncionarioPresenter();
+            setCenter((Parent) cadFuncionarioPresenter.getView());
+        }else if(selectedItem.getValue().equals("Nota Fiscal")){
+            cadNotaFiscalPresenter = new CadNotaFiscalPresenter();
+            setCenter((Parent) cadNotaFiscalPresenter.getView());
+        }else if(selectedItem.getValue().equals("Boleto")){
+//            ProgressBar bar = new ProgressBar();
+//            Task task = new Task<Void>() {
+//                @Override
+//                protected Void call() throws Exception {
+                    cadBoletoPresenter = new CadBoletoPresenter();
+                    setCenter((Parent) cadBoletoPresenter.getView());
+                    
+//                    bar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+//                    return null;
+//                }
+//                
+//            };
+//            bar.progressProperty().bind(task.progressProperty());
+//            new Thread(task).start();
+            
+        }else if(selectedItem.getValue().equals("Recibo")){
+            cadReciboPresenter = new CadReciboPresenter();
+            setCenter((Parent) cadReciboPresenter.getView());
+        }else if(selectedItem.getValue().equals("Orçamento")){
+            cadOrcamentoPresenter = new CadOrcamentoPresenter();
+            setCenter((Parent) cadOrcamentoPresenter.getView());
+        }
+    }
     
 }

@@ -25,6 +25,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -39,10 +40,10 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
     List<CadFornecedorViewListener> listeners = new ArrayList<CadFornecedorView.CadFornecedorViewListener>();
     
     //Elementos do form
-    private VBox formLayout, tabelaLayout;
+    private GridPane formLayout;
+    private VBox tabelaLayout;
     private Label lNome, lCnpj, lEndereco, lTelefone, lEmail;
     private TextField tfNome, tfCnpj, tfEndereco, tfTelefone, tfEmail;
-    private Text titulo;
     private Button salvar, cancelar, excluir;
     private Fornecedor fornecedor = new Fornecedor();
     private TableView<Fornecedor> tabela;
@@ -57,46 +58,41 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         
         this.setSpacing(10);
         
-        formLayout = new VBox();
-        formLayout.setSpacing(10);
+        formLayout = new GridPane();
+        formLayout.setVgap(7);
+        formLayout.setHgap(5);
         
-        titulo = new Text("Cadastro de Fornecedores");
+        HBox tituloLayout = new HBox();
+        Text titulo = new Text("Cadastro de Fornecedor");
         titulo.setId("titulo");
+        tituloLayout.getChildren().add(titulo);
+        tituloLayout.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(tituloLayout);
         
-        HBox nomeLayout = new HBox();
-        nomeLayout.setSpacing(7);
         lNome = new Label("Razão Social: ");
         tfNome = new TextField();
-        nomeLayout.getChildren().addAll(lNome, tfNome);
-        nomeLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lNome, 0, 1);
+        formLayout.add(tfNome, 1, 1);
         
-        HBox cnpjLayout = new HBox();
-        cnpjLayout.setSpacing(7);
         lCnpj = new Label("CNPJ: ");
         tfCnpj = new TextField();
-        cnpjLayout.getChildren().addAll(lCnpj, tfCnpj);
-        cnpjLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lCnpj, 0, 2);
+        formLayout.add(tfCnpj, 1, 2);
         
-        HBox enderecoLayout = new HBox();
-        enderecoLayout.setSpacing(7);
         lEndereco = new Label("Endereço: ");
         tfEndereco = new TextField();
-        enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
-        enderecoLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lEndereco, 0, 3);
+        formLayout.add(tfEndereco, 1, 3);
         
-        HBox telefoneLayout = new HBox();
-        telefoneLayout.setSpacing(7);
         lTelefone = new Label("Telefone: ");
         tfTelefone = new TextField();
-        telefoneLayout.getChildren().addAll(lTelefone, tfTelefone);
-        telefoneLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lTelefone, 0, 4);
+        formLayout.add(tfTelefone, 1, 4);
         
-        HBox emailLayout = new HBox();
-        emailLayout.setSpacing(7);
         lEmail = new Label("E-mail: ");
         tfEmail = new TextField();
-        emailLayout.getChildren().addAll(lEmail, tfEmail);
-        emailLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lEmail, 0, 5);
+        formLayout.add(tfEmail, 1, 5);
         
         HBox botoesLayout = new HBox();
         botoesLayout.setSpacing(7);
@@ -106,6 +102,7 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
         excluir.setDisable(true);
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(botoesLayout, 1, 6);
         
         tabela = new TableView();
         tabela.setMaxWidth(600);
@@ -228,9 +225,9 @@ public class CadFornecedorViewImpl extends VBox implements CadFornecedorView{
             }
         });
         
-        formLayout.getChildren().addAll(titulo, nomeLayout, cnpjLayout, enderecoLayout,emailLayout, telefoneLayout, botoesLayout, tabelaLayout);
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
+        this.getChildren().add(tabelaLayout);
         
     }
 

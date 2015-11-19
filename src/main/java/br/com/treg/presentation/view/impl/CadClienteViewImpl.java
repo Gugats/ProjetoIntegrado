@@ -30,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -44,8 +45,8 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
     List<CadClienteViewListener> listeners = new ArrayList<CadClienteViewListener>();
     
     //Elementos do Form
-    private VBox formLayout, tabelaLayout;
-    private Text titulo;
+    private GridPane formLayout;
+    private VBox tabelaLayout;
     private Label lNome, lNumDoc, lEndereco, lTipoCliente, lTelefone, lEmail;
     private ComboBox<String> comboTipoCliente;
     private Button salvar, cancelar, excluir;
@@ -62,69 +63,67 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
     public CadClienteViewImpl(){
         this.setSpacing(10);
         
-        formLayout = new VBox();
-        formLayout.setSpacing(10);
-        
-        titulo = new Text("Cadastro de Clientes");
+        HBox tituloLayout = new HBox();
+        Text titulo = new Text("Cadastro de Cliente");
         titulo.setId("titulo");
+        tituloLayout.getChildren().add(titulo);
+        tituloLayout.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(tituloLayout);
         
-        HBox nomeLayout = new HBox();
-        nomeLayout.setSpacing(7);
+        formLayout = new GridPane();
+        formLayout.setVgap(7);
+        formLayout.setHgap(5);
+        
         lNome = new Label("Nome: ");
         tfNome = new TextField();
-        nomeLayout.getChildren().addAll(lNome, tfNome);
-        nomeLayout.setAlignment(Pos.TOP_CENTER);
-        
-        HBox enderecoLayout = new HBox();
-        enderecoLayout.setSpacing(7);
+        formLayout.add(lNome, 0, 1);
+        formLayout.add(tfNome, 1, 1);
+
         lEndereco = new Label("Endereço: ");
         tfEndereco = new TextField();
-        enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
-        enderecoLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lEndereco, 0, 2);
+        formLayout.add(tfEndereco, 1, 2);
         
-        HBox telefoneLayout = new HBox();
-        telefoneLayout.setSpacing(7);
         lTelefone = new Label("Telefone: ");
         tfTelefone = new TextField();
-        telefoneLayout.getChildren().addAll(lTelefone, tfTelefone);
-        telefoneLayout.setAlignment(Pos.TOP_CENTER);
-        
-        HBox emailLayout = new HBox();
-        emailLayout.setSpacing(7);
+        formLayout.add(lTelefone, 0, 3);
+        formLayout.add(tfTelefone, 1, 3);
+
         lEmail = new Label("E-mail: ");
         tfEmail = new TextField();
-        emailLayout.getChildren().addAll(lEmail, tfEmail);
-        emailLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lEmail, 0, 4);
+        formLayout.add(tfEmail, 1, 4);
         
-        HBox tipoClienteLayout = new HBox();
-        tipoClienteLayout.setSpacing(7);
         lTipoCliente = new Label("Tipo de Cliente: ");
         comboTipoCliente = new ComboBox();
         comboTipoCliente.getItems().add("Pessoa Física");
         comboTipoCliente.getItems().add("Pessoa Jurídica");
-        tipoClienteLayout.getChildren().addAll(lTipoCliente, comboTipoCliente);
-        tipoClienteLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(lTipoCliente, 0, 5);
+        formLayout.add(comboTipoCliente, 1, 5);
         
-        HBox numDocLayout = new HBox();
-        numDocLayout.setSpacing(7);
         lNumDoc = new Label();
         tfNumDoc = new TextField();
-        numDocLayout.getChildren().addAll(lNumDoc, tfNumDoc);
-        numDocLayout.setAlignment(Pos.TOP_CENTER);
-        numDocLayout.setVisible(false);
+        formLayout.add(lNumDoc, 0, 6);
+        formLayout.add(tfNumDoc, 1, 6);
+        lNumDoc.setVisible(false);
+        tfNumDoc.setVisible(false);
         
         comboTipoCliente.valueProperty().addListener(new ChangeListener() {
 
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
                 if(comboTipoCliente.getValue().equals("Pessoa Física")){
                     lNumDoc.setText("CPF: ");
-                    numDocLayout.setVisible(true);
+                    lNumDoc.setVisible(true);
+                    tfNumDoc.setVisible(true);
                 }else if(comboTipoCliente.getValue().equals("Pessoa Jurídica")){
                     lNumDoc.setText("CNPJ: ");
-                    numDocLayout.setVisible(true);
+                    lNumDoc.setVisible(true);
+                    tfNumDoc.setVisible(true);
                 }else{
-                    numDocLayout.setVisible(false);
+                    lNumDoc.setVisible(false);
+                    tfNumDoc.setVisible(false);
                 }
             }
         });
@@ -137,6 +136,7 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
         excluir.setDisable(true);
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
+        formLayout.add(botoesLayout, 1, 7);
         
         tabela = new TableView();
         tabela.setMaxWidth(700);
@@ -227,7 +227,7 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
                 tfEndereco.setText("");
                 tfTelefone.setText("");
                 tfEmail.setText("");
-                comboTipoCliente.setValue(null);
+                comboTipoCliente.setValue("");
                 excluir.setDisable(true);
                 cliente = new Cliente();
             }
@@ -268,9 +268,9 @@ public class CadClienteViewImpl extends VBox implements CadClienteView {
             }
         });
         
-        formLayout.getChildren().addAll(titulo, nomeLayout, enderecoLayout, telefoneLayout, emailLayout, tipoClienteLayout, numDocLayout, botoesLayout, tabelaLayout);
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);
+        this.getChildren().add(tabelaLayout);
     }
 
     @Override

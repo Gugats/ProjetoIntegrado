@@ -51,11 +51,11 @@ public class GeneratorPDF {
             preface.add(new Paragraph("Valor: R$ "+valor));
             addEmptyLine(preface, 3);
             
-            preface.add(new Paragraph("Recebi(emos) de Thierys Pereira Maia "));
+            preface.add(new Paragraph("Recebi da empresa TR&G "));
             addEmptyLine(preface, 1);
-            preface.add(new Paragraph("A importância de "+valorExtenso+"."));
+            preface.add(new Paragraph("A importância de "+valorExtenso));
             addEmptyLine(preface, 1);
-            preface.add(new Paragraph("Referente a serviços prestados de "+of.getFuncionario().getFuncao()+"."));
+            preface.add(new Paragraph("referente a serviços prestados de "+of.getFuncionario().getFuncao()+"."));
             
             addEmptyLine(preface, 4);
             
@@ -66,7 +66,7 @@ public class GeneratorPDF {
             preface.add(new Paragraph("Campo Grande, "+data.get(Calendar.DATE)+ " de "+
                     mes+" de "+data.get(Calendar.YEAR) + " (" + DiaDaSemana(ds, 1) + ")."));
             addEmptyLine(preface, 1);
-            preface.add(new Paragraph("Emitente: "+of.getFuncionario().getNome()+" - CPF/RG: "+ of.getFuncionario().getCpf()));
+            preface.add(new Paragraph("Funcionário: "+of.getFuncionario().getNome()+" - CPF/RG: "+ of.getFuncionario().getCpf()));
             addEmptyLine(preface, 1);
             preface.add(new Paragraph("Endereço: "+of.getFuncionario().getEndereco()));
             addEmptyLine(preface, 1);

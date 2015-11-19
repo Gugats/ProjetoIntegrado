@@ -34,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -49,8 +50,8 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
     List<CadFuncionarioViewListener> listeners = new ArrayList<CadFuncionarioViewListener>();
     
     //Elementos do form
-    private VBox formLayout, tabelaLayout;
-    private Text titulo;
+    private GridPane formLayout;
+    private VBox tabelaLayout;
     private Label lNome, lEndereco, lCPF, lFuncao, lTelefone, lDiaria;
     private TextField tfNome, tfEndereco, tfCPF, tfFuncao, tfTelefone, tfDiaria;
     private CheckBox checkAtivo;
@@ -63,64 +64,50 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
         
         this.setSpacing(10);
         
-        formLayout = new VBox();
-        formLayout.setSpacing(10);
+        formLayout = new GridPane();
+        formLayout.setVgap(7);
+        formLayout.setHgap(5);
         
-        titulo = new Text("Cadastro de Funcionário");
+        HBox tituloLayout = new HBox();
+        Text titulo = new Text("Cadastro de Funcionário");
         titulo.setId("titulo");
-        formLayout.getChildren().add(titulo);
-        
-        HBox nomeLayout = new HBox();
-        nomeLayout.setSpacing(7);
+        tituloLayout.getChildren().add(titulo);
+        tituloLayout.setAlignment(Pos.TOP_CENTER);
+        this.getChildren().add(tituloLayout);
+
         lNome = new Label("Nome: ");
         tfNome = new TextField();
-        nomeLayout.getChildren().addAll(lNome, tfNome);
-        nomeLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(nomeLayout);
+        formLayout.add(lNome, 0, 1);
+        formLayout.add(tfNome, 1, 1);
         
-        HBox enderecoLayout = new HBox();
-        enderecoLayout.setSpacing(7);
         lEndereco = new Label("Endereço: ");
         tfEndereco = new TextField();
-        enderecoLayout.getChildren().addAll(lEndereco, tfEndereco);
-        enderecoLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(enderecoLayout);
-        
-        HBox telefoneLayout = new HBox();
-        telefoneLayout.setSpacing(7);
+        formLayout.add(lEndereco, 0, 2);
+        formLayout.add(tfEndereco, 1, 2);
+
         lTelefone = new Label("Telefone: ");
         tfTelefone = new TextField();
-        telefoneLayout.getChildren().addAll(lTelefone, tfTelefone);
-        telefoneLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(telefoneLayout);
+        formLayout.add(lTelefone, 0, 3);
+        formLayout.add(tfTelefone, 1, 3);
         
-        HBox cpfLayout = new HBox();
-        cpfLayout.setSpacing(7);
         lCPF = new Label("CPF: ");
         tfCPF = new TextField();
-        cpfLayout.getChildren().addAll(lCPF, tfCPF);
-        cpfLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(cpfLayout);
+        formLayout.add(lCPF, 0, 4);
+        formLayout.add(tfCPF, 1, 4);
         
-        HBox funcaoLayout = new HBox();
-        funcaoLayout.setSpacing(7);
         lFuncao = new Label("Função: ");
         tfFuncao = new TextField();
-        funcaoLayout.getChildren().addAll(lFuncao, tfFuncao);
-        funcaoLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(funcaoLayout);
+        formLayout.add(lFuncao, 0, 5);
+        formLayout.add(tfFuncao, 1, 5);
         
-        HBox diariaLayout = new HBox();
-        diariaLayout.setSpacing(7);
         lDiaria = new Label("Valor da Diária: ");
         tfDiaria = new TextField();
-        diariaLayout.getChildren().addAll(lDiaria, tfDiaria);
-        diariaLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(diariaLayout);
+        formLayout.add(lDiaria, 0, 6);
+        formLayout.add(tfDiaria, 1, 6);
 
         checkAtivo = new CheckBox("Ativo");
         checkAtivo.setSelected(true);
-        formLayout.getChildren().add(checkAtivo);
+        formLayout.add(checkAtivo, 0, 7);
         
         HBox botoesLayout = new HBox();
         botoesLayout.setSpacing(7);
@@ -130,7 +117,7 @@ public class CadFuncionarioViewImpl extends VBox implements CadFuncionarioView{
         excluir.setDisable(true);
         botoesLayout.getChildren().addAll(salvar, cancelar, excluir);
         botoesLayout.setAlignment(Pos.TOP_CENTER);
-        formLayout.getChildren().add(botoesLayout);
+        formLayout.add(botoesLayout, 1, 8);
         
         formLayout.setAlignment(Pos.TOP_CENTER);
         this.getChildren().add(formLayout);

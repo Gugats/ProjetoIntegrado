@@ -240,7 +240,7 @@ public class CadBoletoViewImpl extends VBox implements CadBoletoView{
             }else{
                 dataPagamento.setValue(null);
             }
-            dataPagamento.setValue(LocalDate.MIN);
+            //dataPagamento.setValue(LocalDate.MIN);
             excluir.setDisable(false);
         });
         
